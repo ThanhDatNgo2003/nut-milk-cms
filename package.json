@@ -15,7 +15,8 @@
     "postinstall": "npx prisma generate",
     "test": "jest",
     "test:watch": "jest --watch",
-    "test:coverage": "jest --coverage"
+    "test:coverage": "jest --coverage",
+    "migrate-i18n": "npx tsx scripts/migrate_to_i18n.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

@@ -1,4 +1,4 @@
-import { PrismaClient, Role, PostStatus } from "@prisma/client";
+import { PrismaClient, Role, PostStatus, Language } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import pg from "pg";
 import bcrypt from "bcryptjs";
@@ -93,6 +93,7 @@ async function main() {
       excerpt: "Discover everything about almond milk - from health benefits to our premium blend.",
       categoryId: categories[0].id,
       authorId: admin.id,
+      language: Language.VI,
       status: PostStatus.PUBLISHED,
       publishedAt: new Date(),
       metaTitle: "Complete Guide to Almond Milk | Nut Milk",
@@ -110,6 +111,7 @@ async function main() {
       excerpt: "Explore the top 5 reasons to switch from dairy to plant-based nut milk.",
       categoryId: categories[1].id,
       authorId: editor.id,
+      language: Language.VI,
       status: PostStatus.PUBLISHED,
       publishedAt: new Date(Date.now() - 86400000),
       metaTitle: "5 Benefits of Nut Milk | Health & Nutrition",
@@ -127,12 +129,43 @@ async function main() {
       excerpt: "Why cashew milk is the creamiest dairy-free option for your daily beverages.",
       categoryId: categories[0].id,
       authorId: admin.id,
+      language: Language.VI,
       status: PostStatus.DRAFT,
       metaKeywords: ["cashew milk", "creamy", "dairy-free"],
       tags: { connect: [{ id: tags[1].id }, { id: tags[4].id }] },
     },
   });
-  console.log("  3 blog posts created (2 published, 1 draft)");
+  // English translation of almond milk guide
+  const post1En = await prisma.post.create({
+    data: {
+      title: "The Complete Guide to Almond Milk",
+      slug: "complete-guide-almond-milk",
+      content: "<h2>Why Almond Milk?</h2><p>Almond milk is one of the most popular plant-based milk alternatives. Rich in vitamin E and low in calories.</p><h2>How We Make It</h2><p>Our almond milk is made from premium, organic almonds sourced from the finest farms.</p>",
+      excerpt: "Discover everything about almond milk - from health benefits to our premium blend.",
+      categoryId: categories[0].id,
+      authorId: admin.id,
+      language: "EN",
+      status: PostStatus.PUBLISHED,
+      publishedAt: new Date(),
+      metaTitle: "Complete Guide to Almond Milk | Nut Milk",
+      metaDescription: "Learn about almond milk health benefits and how Nut Milk creates premium beverages.",
+      metaKeywords: ["almond milk", "plant-based", "dairy-free"],
+      tags: { connect: [{ id: tags[0].id }, { id: tags[4].id }, { id: tags[6].id }] },
+    },
+  });
+
+  // Link translation group
+  await prisma.post.update({
+    where: { id: post1.id },
+    data: { translationGroupId: post1.id },
+  });
+  await prisma.post.update({
+    where: { id: post1En.id },
+    data: { translationGroupId: post1.id },
+  });
+  console.log("  English translation linked to almond milk guide");
+
+  console.log("  4 blog posts created (3 published, 1 draft)");
 
   // Featured content
   await prisma.featuredContent.create({ data: { postId: post1.id, position: 1 } });
@@ -142,6 +175,7 @@ async function main() {
   await prisma.product.create({
     data: {
       name: "Original Almond Milk", slug: "original-almond-milk",
+      language: Language.VI,
       description: "Our signature almond milk made from premium organic almonds. Smooth, creamy, and naturally delicious.",
       price: 65000, image: "/images/almond-milk.jpg",
       images: ["/images/almond-milk.jpg", "/images/almond-milk-2.jpg"],
@@ -160,6 +194,7 @@ async function main() {
   await prisma.product.create({
     data: {
       name: "Cashew Milk Blend", slug: "cashew-milk-blend",
+      language: Language.VI,
       description: "Ultra-creamy cashew milk blended with a hint of vanilla. Perfect for coffee and smoothies.",
       price: 75000, image: "/images/cashew-milk.jpg",
       images: ["/images/cashew-milk.jpg"],
@@ -178,6 +213,7 @@ async function main() {
   await prisma.product.create({
     data: {
       name: "Macadamia Milk Premium", slug: "macadamia-milk-premium",
+      language: Language.VI,
       description: "Luxurious macadamia nut milk with a rich, buttery flavor. Our most premium offering.",
       price: 95000, image: "/images/macadamia-milk.jpg",
       images: ["/images/macadamia-milk.jpg"],
@@ -195,6 +231,7 @@ async function main() {
   await prisma.product.create({
     data: {
       name: "Coconut Almond Mix", slug: "coconut-almond-mix",
+      language: Language.VI,
       description: "A tropical twist blending coconut and almond milk. Refreshing and nutritious.",
       price: 70000, image: "/images/coconut-almond.jpg",
       images: ["/images/coconut-almond.jpg"],
@@ -213,7 +250,8 @@ async function main() {
   // Settings
   await prisma.settings.create({
     data: {
-      id: "main", siteName: "Nut Milk", siteUrl: "https://nutmilk.vn",
+      siteName: "Nut Milk", siteUrl: "https://nutmilk.vn",
+      language: Language.VI,
       email: "hello@nutmilk.vn", phone: "+84 123 456 789",
       address: "Ho Chi Minh City, Vietnam",
       tiktok: "https://tiktok.com/@nutmilk.vn",
