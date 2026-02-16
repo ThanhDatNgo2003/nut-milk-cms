@@ -1,6 +1,12 @@
 import { NextResponse } from "next/server";
 
+// Logout is handled by NextAuth via signOut()
+// This route provides a simple redirect/info endpoint
 export async function POST() {
-  // Will be implemented in Phase 1
-  return NextResponse.json({ message: "Logout endpoint - to be implemented" });
+  return NextResponse.json(
+    {
+      message: "Use NextAuth signOut() on the client side or POST to /api/auth/signout",
+    },
+    { status: 200 }
+  );
 }
