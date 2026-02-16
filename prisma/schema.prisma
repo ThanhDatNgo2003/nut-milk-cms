@@ -1,0 +1,237 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/.prisma/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ============= Users & Auth =============
+
+model User {
+  id            String    @id @default(cuid())
+  email         String    @unique
+  name          String?
+  password      String
+  role          Role      @default(EDITOR)
+  isActive      Boolean   @default(true)
+  lastLogin     DateTime?
+
+  posts         Post[]
+  sessions      Session[]
+  auditLogs     AuditLog[]
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+enum Role {
+  ADMIN
+  EDITOR
+  VIEWER
+}
+
+model Session {
+  id            String    @id @default(cuid())
+  sessionToken  String    @unique
+  userId        String
+  user          User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  expires       DateTime
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+// ============= Blog Posts =============
+
+model Post {
+  id              String    @id @default(cuid())
+  title           String    @db.VarChar(200)
+  slug            String    @unique
+  content         String    @db.Text
+  excerpt         String?   @db.VarChar(160)
+
+  category        Category  @relation(fields: [categoryId], references: [id])
+  categoryId      String
+
+  author          User      @relation(fields: [authorId], references: [id])
+  authorId        String
+
+  tags            Tag[]     @relation("PostToTag")
+
+  featuredImage   String?
+  thumbnailImage  String?
+
+  metaTitle       String?   @db.VarChar(60)
+  metaDescription String?   @db.VarChar(160)
+  metaKeywords    String[]
+
+  status          PostStatus @default(DRAFT)
+  publishedAt     DateTime?
+  updatedAt       DateTime  @updatedAt
+
+  views           Int       @default(0)
+  likes           Int       @default(0)
+
+  comments        Comment[]
+  featuredIn      FeaturedContent?
+
+  createdAt       DateTime  @default(now())
+
+  @@index([categoryId])
+  @@index([authorId])
+  @@index([status])
+  @@index([publishedAt])
+}
+
+enum PostStatus {
+  DRAFT
+  SCHEDULED
+  PUBLISHED
+  ARCHIVED
+}
+
+model Category {
+  id          String    @id @default(cuid())
+  name        String    @unique
+  slug        String    @unique
+  description String?
+  posts       Post[]
+
+  createdAt   DateTime  @default(now())
+}
+
+model Tag {
+  id        String    @id @default(cuid())
+  name      String    @unique
+  slug      String    @unique
+  posts     Post[]    @relation("PostToTag")
+
+  createdAt DateTime  @default(now())
+}
+
+model Comment {
+  id        String    @id @default(cuid())
+  content   String    @db.Text
+  post      Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId    String
+
+  author    String
+  email     String
+
+  approved  Boolean   @default(false)
+
+  createdAt DateTime  @default(now())
+
+  @@index([postId])
+}
+
+// ============= Products =============
+
+model Product {
+  id          String    @id @default(cuid())
+  name        String
+  slug        String    @unique
+  description String    @db.Text
+  price       Float
+
+  image       String
+  images      String[]
+
+  category    String?
+  tags        String[]
+
+  variants    ProductVariant[]
+
+  isFeatured      Boolean   @default(false)
+  featuredPosition Int?
+  featuredLabel    String?
+
+  metaTitle       String?
+  metaDescription String?
+  metaKeywords    String[]
+
+  views       Int       @default(0)
+
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model ProductVariant {
+  id        String    @id @default(cuid())
+  product   Product   @relation(fields: [productId], references: [id], onDelete: Cascade)
+  productId String
+
+  size      String
+  price     Float
+  stock     Int
+
+  createdAt DateTime  @default(now())
+}
+
+// ============= Featured Content =============
+
+model FeaturedContent {
+  id          String    @id @default(cuid())
+  post        Post      @relation(fields: [postId], references: [id], onDelete: Cascade)
+  postId      String    @unique
+  position    Int
+
+  createdAt   DateTime  @default(now())
+}
+
+// ============= Analytics & Logging =============
+
+model PageView {
+  id        String    @id @default(cuid())
+  path      String
+  referer   String?
+  userAgent String?
+  ip        String?
+
+  createdAt DateTime  @default(now())
+
+  @@index([path])
+  @@index([createdAt])
+}
+
+model AuditLog {
+  id         String    @id @default(cuid())
+  user       User      @relation(fields: [userId], references: [id])
+  userId     String
+
+  action     String
+  resource   String
+  resourceId String
+
+  details    Json?
+
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([action])
+}
+
+model Settings {
+  id        String    @id @default("main")
+
+  siteName  String    @default("Nut Milk")
+  siteUrl   String    @default("https://nutmilk.vn")
+  logo      String?
+  favicon   String?
+
+  email     String?
+  phone     String?
+  address   String?
+
+  tiktok    String?
+  instagram String?
+  facebook  String?
+
+  enableComments   Boolean @default(true)
+  enableNewsletter Boolean @default(true)
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+}

@@ -1,0 +1,40 @@
+import { z } from "zod";
+
+export const loginSchema = z.object({
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export const registerSchema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  password: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export const postSchema = z.object({
+  title: z.string().min(1, "Title is required").max(200),
+  slug: z.string().min(1, "Slug is required"),
+  content: z.string().min(1, "Content is required"),
+  excerpt: z.string().max(160).optional(),
+  categoryId: z.string().min(1, "Category is required"),
+  featuredImage: z.string().url().optional(),
+  metaTitle: z.string().max(60).optional(),
+  metaDescription: z.string().max(160).optional(),
+  metaKeywords: z.array(z.string()).optional(),
+  status: z.enum(["DRAFT", "SCHEDULED", "PUBLISHED", "ARCHIVED"]).optional(),
+});
+
+export const productSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  slug: z.string().min(1, "Slug is required"),
+  description: z.string().min(1, "Description is required"),
+  price: z.number().positive("Price must be positive"),
+  image: z.string().url("Invalid image URL"),
+  category: z.string().optional(),
+  tags: z.array(z.string()).optional(),
+});
+
+export type LoginInput = z.infer<typeof loginSchema>;
+export type RegisterInput = z.infer<typeof registerSchema>;
+export type PostInput = z.infer<typeof postSchema>;
+export type ProductInput = z.infer<typeof productSchema>;
