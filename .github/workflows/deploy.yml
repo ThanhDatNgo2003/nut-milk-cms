@@ -1,0 +1,106 @@
+name: CMS - Deploy to Pi
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Deploy to Raspberry Pi
+    runs-on: self-hosted
+    environment: production
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Pull latest code on Pi
+        run: |
+          cd /home/pi/nut-milk-cms
+          git fetch origin main
+          git reset --hard origin/main
+
+      - name: Create .env.local
+        run: |
+          cat > /home/pi/nut-milk-cms/.env.local << 'ENVEOF'
+          DATABASE_URL=${{ secrets.DATABASE_URL }}
+          NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+          AUTH_SECRET=${{ secrets.AUTH_SECRET }}
+          CMS_API_KEY=${{ secrets.CMS_API_KEY }}
+          ENVEOF
+
+      - name: Create Docker .env
+        run: |
+          cat > /home/pi/.env << 'ENVEOF'
+          POSTGRES_DB=${{ secrets.POSTGRES_DB }}
+          POSTGRES_USER=${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+          NEXTAUTH_SECRET=${{ secrets.NEXTAUTH_SECRET }}
+          NEXTAUTH_URL=${{ secrets.NEXTAUTH_URL }}
+          AUTH_SECRET=${{ secrets.AUTH_SECRET }}
+          CMS_API_KEY=${{ secrets.CMS_API_KEY }}
+          DOCKER_STORAGE=/mnt/docker-storage
+          NGINX_PORT=8090
+          PRISMA_MIGRATE=false
+          ENVEOF
+
+      - name: Rebuild & restart containers
+        run: |
+          cd /home/pi
+          docker compose build cms --no-cache
+          docker compose up -d
+
+      - name: Run database migrations
+        run: |
+          cd /home/pi/nut-milk-cms
+          DATABASE_URL="${{ secrets.DATABASE_URL }}" npx prisma migrate deploy
+
+      - name: Wait for services
+        run: sleep 30
+
+      - name: Health check - CMS
+        run: |
+          STATUS=$(curl -sf http://localhost:8090/api/health | python3 -c "import sys,json; print(json.load(sys.stdin)['status'])")
+          if [ "$STATUS" != "ok" ]; then
+            echo "CMS health check failed"
+            docker compose -f /home/pi/docker-compose.yml logs cms --tail 20
+            exit 1
+          fi
+          echo "CMS is healthy"
+
+      - name: Health check - MCP
+        run: |
+          STATUS=$(curl -sf http://localhost:8090/mcp/health | python3 -c "import sys,json; print(json.load(sys.stdin)['status'])")
+          if [ "$STATUS" != "ok" ]; then
+            echo "MCP health check failed"
+            docker compose -f /home/pi/docker-compose.yml logs mcp --tail 20
+            exit 1
+          fi
+          echo "MCP is healthy"
+
+      - name: Health check - Nginx
+        run: |
+          RESULT=$(curl -sf http://localhost:8090/nginx-health)
+          if [ "$RESULT" != "healthy" ]; then
+            echo "Nginx health check failed"
+            exit 1
+          fi
+          echo "Nginx is healthy"
+
+      - name: Deployment summary
+        run: |
+          echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "| Service | Status |" >> $GITHUB_STEP_SUMMARY
+          echo "|---------|--------|" >> $GITHUB_STEP_SUMMARY
+          echo "| CMS | ✅ Healthy |" >> $GITHUB_STEP_SUMMARY
+          echo "| MCP | ✅ Healthy |" >> $GITHUB_STEP_SUMMARY
+          echo "| Nginx | ✅ Healthy |" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Deployed at: $(date -u '+%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "Commit: ${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
