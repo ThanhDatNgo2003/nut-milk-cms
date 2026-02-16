@@ -32,6 +32,11 @@ enum Role {
   VIEWER
 }
 
+enum Language {
+  VI
+  EN
+}
+
 model Session {
   id            String    @id @default(cuid())
   sessionToken  String    @unique
@@ -48,9 +53,14 @@ model Session {
 model Post {
   id              String    @id @default(cuid())
   title           String    @db.VarChar(200)
-  slug            String    @unique
+  slug            String
   content         String    @db.Text
   excerpt         String?   @db.VarChar(160)
+
+  language          Language  @default(VI)
+  translationGroupId String?
+  translatedFrom    Post?     @relation("PostTranslations", fields: [translationGroupId], references: [id], onDelete: SetNull)
+  translations      Post[]    @relation("PostTranslations")
 
   category        Category  @relation(fields: [categoryId], references: [id])
   categoryId      String
@@ -79,10 +89,13 @@ model Post {
 
   createdAt       DateTime  @default(now())
 
+  @@unique([slug, language])
   @@index([categoryId])
   @@index([authorId])
   @@index([status])
   @@index([publishedAt])
+  @@index([language])
+  @@index([translationGroupId])
 }
 
 enum PostStatus {
@@ -132,9 +145,12 @@ model Comment {
 model Product {
   id          String    @id @default(cuid())
   name        String
-  slug        String    @unique
+  slug        String
   description String    @db.Text
   price       Float
+
+  language          Language  @default(VI)
+  translationGroupId String?
 
   image       String
   images      String[]
@@ -156,6 +172,9 @@ model Product {
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  @@unique([slug, language])
+  @@index([language])
 }
 
 model ProductVariant {
@@ -214,7 +233,8 @@ model AuditLog {
 }
 
 model Settings {
-  id        String    @id @default("main")
+  id        String    @id @default(cuid())
+  language  Language  @default(VI)
 
   siteName  String    @default("Nut Milk")
   siteUrl   String    @default("https://nutmilk.vn")
@@ -234,4 +254,6 @@ model Settings {
 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
+
+  @@unique([language])
 }
