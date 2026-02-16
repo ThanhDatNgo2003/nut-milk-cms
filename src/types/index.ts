@@ -1,11 +1,24 @@
-import type { User, Post, Product, Category, Tag, PostStatus, Role } from "@prisma/client";
+import type { User, Post, Product, Category, Tag, PostStatus, Role, Language } from "@prisma/client";
 
-export type { User, Post, Product, Category, Tag, PostStatus, Role };
+export type { User, Post, Product, Category, Tag, PostStatus, Role, Language };
 
 export type PostWithRelations = Post & {
   author: Pick<User, "id" | "name" | "email">;
   category: Category;
   tags: Tag[];
+  translations?: Array<{
+    id: string;
+    language: Language;
+    title: string;
+    slug: string;
+    status: PostStatus;
+  }>;
+  translatedFrom?: {
+    id: string;
+    language: Language;
+    title: string;
+    slug: string;
+  } | null;
 };
 
 export type ProductWithVariants = Product & {
@@ -29,6 +42,7 @@ export interface PaginationParams {
   search?: string;
   status?: PostStatus;
   categoryId?: string;
+  language?: Language;
 }
 
 export interface CategoryWithCount extends Category {

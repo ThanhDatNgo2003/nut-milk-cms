@@ -47,6 +47,8 @@ export const createPostSchema = z.object({
   metaDescription: z.string().max(160).optional(),
   metaKeywords: z.array(z.string()).optional(),
   status: z.enum(["DRAFT", "SCHEDULED", "PUBLISHED", "ARCHIVED"]).optional(),
+  language: z.enum(["VI", "EN"]).optional().default("VI"),
+  linkWithId: z.string().optional(),
 }).transform((data) => ({
   ...data,
   slug: data.slug || generateSlug(data.title),
