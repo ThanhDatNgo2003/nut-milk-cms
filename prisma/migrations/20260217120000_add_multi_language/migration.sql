@@ -5,8 +5,8 @@ CREATE TYPE "Language" AS ENUM ('VI', 'EN');
 ALTER TABLE "Post" ADD COLUMN "language" "Language" NOT NULL DEFAULT 'VI';
 ALTER TABLE "Post" ADD COLUMN "translationGroupId" TEXT;
 
--- Drop old unique constraint on Post.slug and add composite unique
-ALTER TABLE "Post" DROP CONSTRAINT "Post_slug_key";
+-- Drop old unique index on Post.slug and add composite unique
+DROP INDEX "Post_slug_key";
 ALTER TABLE "Post" ADD CONSTRAINT "Post_slug_language_key" UNIQUE ("slug", "language");
 
 -- Add self-referential foreign key for translation group
@@ -20,8 +20,8 @@ CREATE INDEX "Post_translationGroupId_idx" ON "Post"("translationGroupId");
 ALTER TABLE "Product" ADD COLUMN "language" "Language" NOT NULL DEFAULT 'VI';
 ALTER TABLE "Product" ADD COLUMN "translationGroupId" TEXT;
 
--- Drop old unique constraint on Product.slug and add composite unique
-ALTER TABLE "Product" DROP CONSTRAINT "Product_slug_key";
+-- Drop old unique index on Product.slug and add composite unique
+DROP INDEX "Product_slug_key";
 ALTER TABLE "Product" ADD CONSTRAINT "Product_slug_language_key" UNIQUE ("slug", "language");
 
 -- Add indexes for Product
