@@ -11,8 +11,10 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { MoreHorizontal, Eye, Pencil, Trash2, Globe, GlobeLock } from "lucide-react";
+import { MoreHorizontal, Eye, Pencil, Trash2, Globe, GlobeLock, Languages } from "lucide-react";
 import { formatDate, calculateReadingTime } from "@/lib/utils";
+import { getLanguageFlag, getOppositeLanguage } from "@/lib/i18n";
+import type { SupportedLanguage } from "@/lib/i18n";
 import type { PostWithRelations } from "@/types";
 
 interface BlogCardProps {
@@ -46,6 +48,9 @@ export default function BlogCard({ post, onPublish, onDelete }: BlogCardProps) {
       <div className="flex-1 min-w-0 space-y-1">
         <div className="flex items-center gap-2">
           <Badge variant={statusColors[post.status]}>{post.status}</Badge>
+          <Badge variant="outline" className="text-xs">
+            {getLanguageFlag(post.language as SupportedLanguage)} {post.language}
+          </Badge>
           <span className="text-xs text-muted-foreground">{post.category.name}</span>
           <span className="text-xs text-muted-foreground">
             {calculateReadingTime(post.content)} min read
@@ -96,6 +101,11 @@ export default function BlogCard({ post, onPublish, onDelete }: BlogCardProps) {
           <DropdownMenuItem asChild>
             <Link href={`/blog/${post.id}/preview`}>
               <Eye className="mr-2 h-4 w-4" /> Preview
+            </Link>
+          </DropdownMenuItem>
+          <DropdownMenuItem asChild>
+            <Link href={`/blog/new?from=${post.id}&lang=${getOppositeLanguage(post.language as SupportedLanguage).toLowerCase()}`}>
+              <Languages className="mr-2 h-4 w-4" /> Translate
             </Link>
           </DropdownMenuItem>
           <DropdownMenuSeparator />

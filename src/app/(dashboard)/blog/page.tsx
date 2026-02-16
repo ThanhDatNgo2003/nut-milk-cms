@@ -31,6 +31,7 @@ export default function BlogListPage() {
   const [search, setSearch] = useState("");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [categoryFilter, setCategoryFilter] = useState<string>("all");
+  const [languageFilter, setLanguageFilter] = useState<string>("all");
   const [deleteId, setDeleteId] = useState<string | null>(null);
 
   const { data, isLoading, error } = usePosts({
@@ -39,6 +40,7 @@ export default function BlogListPage() {
     search: search || undefined,
     status: statusFilter !== "all" ? (statusFilter as PostStatus) : undefined,
     categoryId: categoryFilter !== "all" ? categoryFilter : undefined,
+    language: languageFilter !== "all" ? (languageFilter as "VI" | "EN") : undefined,
   });
 
   const { data: categoriesData } = useCategories();
@@ -129,6 +131,22 @@ export default function BlogListPage() {
                 {cat.name} ({cat._count.posts})
               </SelectItem>
             ))}
+          </SelectContent>
+        </Select>
+        <Select
+          value={languageFilter}
+          onValueChange={(v) => {
+            setLanguageFilter(v);
+            setPage(1);
+          }}
+        >
+          <SelectTrigger className="w-[140px]">
+            <SelectValue placeholder="Language" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">All Languages</SelectItem>
+            <SelectItem value="VI">🇻🇳 Vietnamese</SelectItem>
+            <SelectItem value="EN">🇬🇧 English</SelectItem>
           </SelectContent>
         </Select>
       </div>
