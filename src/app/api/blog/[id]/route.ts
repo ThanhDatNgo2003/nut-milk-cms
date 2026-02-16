@@ -19,6 +19,12 @@ export async function GET(request: NextRequest, { params }: RouteParams) {
         author: { select: { id: true, name: true, email: true } },
         category: true,
         tags: true,
+        translations: {
+          select: { id: true, language: true, title: true, slug: true, status: true },
+        },
+        translatedFrom: {
+          select: { id: true, language: true, title: true, slug: true },
+        },
       },
     });
 
@@ -49,9 +55,19 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
     }
 
     if (body.slug && body.slug !== existing.slug) {
-      const slugTaken = await prisma.post.findUnique({ where: { slug: body.slug } });
+      const targetLang = body.language || existing.language;
+      const slugTaken = await prisma.post.findFirst({
+        where: {
+          slug: body.slug,
+          language: targetLang,
+          NOT: { id },
+        },
+      });
       if (slugTaken) {
-        return NextResponse.json({ error: "A post with this slug already exists" }, { status: 409 });
+        return NextResponse.json(
+          { error: "A post with this slug already exists in this language" },
+          { status: 409 }
+        );
       }
     }
 
@@ -69,6 +85,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
         author: { select: { id: true, name: true, email: true } },
         category: true,
         tags: true,
+        translations: {
+          select: { id: true, language: true, title: true, slug: true, status: true },
+        },
       },
     });
 

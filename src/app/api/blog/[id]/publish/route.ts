@@ -38,6 +38,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           author: { select: { id: true, name: true, email: true } },
           category: true,
           tags: true,
+          translations: {
+            select: { id: true, language: true, title: true, slug: true, status: true },
+          },
         },
       });
 
@@ -52,6 +55,9 @@ export async function PATCH(request: NextRequest, { params }: RouteParams) {
           author: { select: { id: true, name: true, email: true } },
           category: true,
           tags: true,
+          translations: {
+            select: { id: true, language: true, title: true, slug: true, status: true },
+          },
         },
       });
 

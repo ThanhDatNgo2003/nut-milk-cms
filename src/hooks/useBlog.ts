@@ -11,6 +11,7 @@ async function fetchPosts(params: PaginationParams): Promise<PostListResponse> {
   if (params.search) searchParams.set("search", params.search);
   if (params.status) searchParams.set("status", params.status);
   if (params.categoryId) searchParams.set("categoryId", params.categoryId);
+  if (params.language) searchParams.set("lang", params.language.toLowerCase());
 
   const res = await fetch(`/api/blog?${searchParams}`);
   if (!res.ok) {

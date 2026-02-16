@@ -16,6 +16,7 @@ export async function GET(request: NextRequest) {
     const search = searchParams.get("search") || "";
     const status = searchParams.get("status") || "";
     const categoryId = searchParams.get("categoryId") || "";
+    const lang = searchParams.get("lang") || "";
 
     const where: Prisma.PostWhereInput = {};
 
@@ -34,6 +35,10 @@ export async function GET(request: NextRequest) {
       where.categoryId = categoryId;
     }
 
+    if (lang && ["VI", "EN"].includes(lang.toUpperCase())) {
+      where.language = lang.toUpperCase() as "VI" | "EN";
+    }
+
     const [posts, total] = await Promise.all([
       prisma.post.findMany({
         where,
@@ -41,6 +46,9 @@ export async function GET(request: NextRequest) {
           author: { select: { id: true, name: true, email: true } },
           category: true,
           tags: true,
+          translations: {
+            select: { id: true, language: true, title: true, slug: true, status: true },
+          },
         },
         orderBy: { createdAt: "desc" },
         skip: (page - 1) * limit,
@@ -80,9 +88,11 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: message }, { status: 400 });
     }
 
-    const { tagIds, ...postData } = result.data;
+    const { tagIds, linkWithId, ...postData } = result.data;
 
-    const existing = await prisma.post.findUnique({ where: { slug: postData.slug } });
+    const existing = await prisma.post.findFirst({
+      where: { slug: postData.slug, language: postData.language || "VI" },
+    });
     if (existing) {
       return NextResponse.json({ error: "A post with this slug already exists" }, { status: 409 });
     }
@@ -104,8 +114,31 @@ export async function POST(request: NextRequest) {
         author: { select: { id: true, name: true, email: true } },
         category: true,
         tags: true,
+        translations: {
+          select: { id: true, language: true, title: true, slug: true, status: true },
+        },
       },
     });
+
+    // Link as translation if linkWithId provided
+    if (linkWithId) {
+      const sourcePost = await prisma.post.findUnique({ where: { id: linkWithId } });
+      if (sourcePost) {
+        const groupId = sourcePost.translationGroupId || sourcePost.id;
+        // Set group on source if not already set
+        if (!sourcePost.translationGroupId) {
+          await prisma.post.update({
+            where: { id: sourcePost.id },
+            data: { translationGroupId: groupId },
+          });
+        }
+        // Link new post to the group
+        await prisma.post.update({
+          where: { id: post.id },
+          data: { translationGroupId: groupId },
+        });
+      }
+    }
 
     return NextResponse.json({ data: post }, { status: 201 });
   } catch (error) {
