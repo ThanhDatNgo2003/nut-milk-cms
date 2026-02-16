@@ -1,8 +1,11 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { useCreatePost, useUploadImage } from "@/hooks/useBlog";
+import { useSearchParams } from "next/navigation";
+import { useCreatePost, useUploadImage, usePost } from "@/hooks/useBlog";
+import LanguageSelector from "@/components/blog/LanguageSelector";
+import type { SupportedLanguage } from "@/lib/i18n";
 import { useCategories, useCreateCategory } from "@/hooks/useCategories";
 import { useTags, useCreateTag } from "@/hooks/useTags";
 import BlogEditor from "@/components/blog/BlogEditor";
@@ -48,6 +51,33 @@ export default function NewBlogPostPage() {
   const [metaKeywords, setMetaKeywords] = useState<string[]>([]);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newTagName, setNewTagName] = useState("");
+
+  const searchParams = useSearchParams();
+  const linkWithId = searchParams.get("from");
+  const initialLang = (searchParams.get("lang")?.toUpperCase() as SupportedLanguage) || "VI";
+
+  const [language, setLanguage] = useState<SupportedLanguage>(initialLang);
+
+  // If translating from another post, load its data
+  const { data: sourcePostData } = usePost(linkWithId || "");
+
+  const [sourceLoaded, setSourceLoaded] = useState(false);
+
+  useEffect(() => {
+    if (sourcePostData?.data && !sourceLoaded && linkWithId) {
+      const source = sourcePostData.data;
+      setTitle(source.title);
+      setContent(source.content);
+      setExcerpt(source.excerpt || "");
+      setCategoryId(source.categoryId);
+      setSelectedTagIds(source.tags.map((t) => t.id));
+      setSlug(source.slug);
+      setMetaTitle(source.metaTitle || "");
+      setMetaDescription(source.metaDescription || "");
+      setMetaKeywords(source.metaKeywords || []);
+      setSourceLoaded(true);
+    }
+  }, [sourcePostData, sourceLoaded, linkWithId]);
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
@@ -117,6 +147,8 @@ export default function NewBlogPostPage() {
         metaDescription: metaDescription || undefined,
         metaKeywords: metaKeywords.length > 0 ? metaKeywords : undefined,
         status,
+        language,
+        linkWithId: linkWithId || undefined,
       });
 
       toast.success(status === "PUBLISHED" ? "Post published!" : "Draft saved!");
@@ -133,7 +165,9 @@ export default function NewBlogPostPage() {
           <Button variant="ghost" size="sm" asChild>
             <Link href="/blog"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
-          <h1 className="text-2xl font-bold">New Blog Post</h1>
+          <h1 className="text-2xl font-bold">
+            {linkWithId ? "Translate Blog Post" : "New Blog Post"}
+          </h1>
         </div>
         <div className="flex gap-2">
           <Button variant="outline" onClick={() => handleSave("DRAFT")} disabled={createPost.isPending}>
@@ -171,6 +205,19 @@ export default function NewBlogPostPage() {
             </div>
 
             <div className="space-y-4">
+              <div className="space-y-2 rounded-lg border bg-card p-4">
+                <Label>Language</Label>
+                <LanguageSelector
+                  value={language}
+                  onChange={setLanguage}
+                  disabled={!!linkWithId}
+                />
+                {linkWithId && (
+                  <p className="text-xs text-muted-foreground">
+                    Translating from source post
+                  </p>
+                )}
+              </div>
               <div className="space-y-2 rounded-lg border bg-card p-4">
                 <Label>Featured Image</Label>
                 {featuredImage ? (

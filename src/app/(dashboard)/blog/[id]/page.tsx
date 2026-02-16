@@ -20,7 +20,9 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowLeft, Save, Eye, Globe, GlobeLock, ImageIcon, X } from "lucide-react";
+import { ArrowLeft, Save, Eye, Globe, GlobeLock, ImageIcon, X, Languages } from "lucide-react";
+import { getLanguageFlag, getOppositeLanguage } from "@/lib/i18n";
+import type { SupportedLanguage } from "@/lib/i18n";
 import { toast } from "sonner";
 import { generateSlug } from "@/lib/utils";
 import Link from "next/link";
@@ -181,10 +183,19 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
             <h1 className="text-2xl font-bold">Edit Post</h1>
             <div className="flex items-center gap-2 mt-1">
               <Badge variant={post.status === "PUBLISHED" ? "default" : "secondary"}>{post.status}</Badge>
+              <Badge variant="outline">
+                {getLanguageFlag(post.language as SupportedLanguage)} {post.language}
+              </Badge>
             </div>
           </div>
         </div>
         <div className="flex gap-2">
+          <Button variant="outline" size="sm" asChild>
+            <Link href={`/blog/new?from=${id}&lang=${getOppositeLanguage(post.language as SupportedLanguage).toLowerCase()}`}>
+              <Languages className="mr-2 h-4 w-4" />
+              Translate to {getOppositeLanguage(post.language as SupportedLanguage)}
+            </Link>
+          </Button>
           <Button variant="outline" size="sm" asChild>
             <Link href={`/blog/${id}/preview`}><Eye className="mr-2 h-4 w-4" /> Preview</Link>
           </Button>
@@ -276,6 +287,26 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
                   <Button variant="outline" size="sm" onClick={handleCreateTag} disabled={createTag.isPending}>Add</Button>
                 </div>
               </div>
+
+              {post.translations && post.translations.length > 0 && (
+                <div className="space-y-2 rounded-lg border bg-card p-4">
+                  <Label className="text-sm font-medium">Translations</Label>
+                  <div className="mt-2 space-y-2">
+                    {post.translations.map((t) => (
+                      <div key={t.id} className="flex items-center justify-between text-sm">
+                        <span>
+                          {getLanguageFlag(t.language as SupportedLanguage)} {t.title}
+                        </span>
+                        <Button variant="ghost" size="sm" asChild>
+                          <Link href={`/blog/${t.id}`} className="text-xs">
+                            Edit
+                          </Link>
+                        </Button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
             </div>
           </div>
         </TabsContent>
