@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { useSearchParams } from "next/navigation";
 import { useCreatePost, useUploadImage, usePost } from "@/hooks/useBlog";
@@ -29,7 +29,46 @@ import { generateSlug } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
 
-export default function NewBlogPostPage() {
+/* ------------------------------------------------------------------ */
+/*  Form initial values                                                */
+/* ------------------------------------------------------------------ */
+interface FormDefaults {
+  title: string;
+  content: string;
+  excerpt: string;
+  categoryId: string;
+  selectedTagIds: string[];
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  metaKeywords: string[];
+}
+
+const EMPTY_DEFAULTS: FormDefaults = {
+  title: "",
+  content: "",
+  excerpt: "",
+  categoryId: "",
+  selectedTagIds: [],
+  slug: "",
+  metaTitle: "",
+  metaDescription: "",
+  metaKeywords: [],
+};
+
+/* ------------------------------------------------------------------ */
+/*  Inner form — receives initial values as props so useState          */
+/*  initialisers work correctly without useEffect.                     */
+/* ------------------------------------------------------------------ */
+function NewPostForm({
+  defaults,
+  language: initialLanguage,
+  linkWithId,
+}: {
+  defaults: FormDefaults;
+  language: SupportedLanguage;
+  linkWithId: string | null;
+}) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const createPost = useCreatePost();
@@ -39,45 +78,19 @@ export default function NewBlogPostPage() {
   const createCategory = useCreateCategory();
   const createTag = useCreateTag();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [excerpt, setExcerpt] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
+  const [title, setTitle] = useState(defaults.title);
+  const [content, setContent] = useState(defaults.content);
+  const [excerpt, setExcerpt] = useState(defaults.excerpt);
+  const [categoryId, setCategoryId] = useState(defaults.categoryId);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>(defaults.selectedTagIds);
   const [featuredImage, setFeaturedImage] = useState("");
-  const [slug, setSlug] = useState("");
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
-  const [metaKeywords, setMetaKeywords] = useState<string[]>([]);
+  const [slug, setSlug] = useState(defaults.slug);
+  const [metaTitle, setMetaTitle] = useState(defaults.metaTitle);
+  const [metaDescription, setMetaDescription] = useState(defaults.metaDescription);
+  const [metaKeywords, setMetaKeywords] = useState<string[]>(defaults.metaKeywords);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newTagName, setNewTagName] = useState("");
-
-  const searchParams = useSearchParams();
-  const linkWithId = searchParams.get("from");
-  const initialLang = (searchParams.get("lang")?.toUpperCase() as SupportedLanguage) || "VI";
-
-  const [language, setLanguage] = useState<SupportedLanguage>(initialLang);
-
-  // If translating from another post, load its data
-  const { data: sourcePostData } = usePost(linkWithId || "");
-
-  const [sourceLoaded, setSourceLoaded] = useState(false);
-
-  useEffect(() => {
-    if (sourcePostData?.data && !sourceLoaded && linkWithId) {
-      const source = sourcePostData.data;
-      setTitle(source.title);
-      setContent(source.content);
-      setExcerpt(source.excerpt || "");
-      setCategoryId(source.categoryId);
-      setSelectedTagIds(source.tags.map((t) => t.id));
-      setSlug(source.slug);
-      setMetaTitle(source.metaTitle || "");
-      setMetaDescription(source.metaDescription || "");
-      setMetaKeywords(source.metaKeywords || []);
-      setSourceLoaded(true);
-    }
-  }, [sourcePostData, sourceLoaded, linkWithId]);
+  const [language, setLanguage] = useState<SupportedLanguage>(initialLanguage);
 
   const handleTitleChange = (value: string) => {
     setTitle(value);
@@ -279,5 +292,50 @@ export default function NewBlogPostPage() {
         </TabsContent>
       </Tabs>
     </div>
+  );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page wrapper — waits for source post when translating              */
+/* ------------------------------------------------------------------ */
+export default function NewBlogPostPage() {
+  const searchParams = useSearchParams();
+  const linkWithId = searchParams.get("from");
+  const initialLang = (searchParams.get("lang")?.toUpperCase() as SupportedLanguage) || "VI";
+
+  // Fetch source post when translating (linkWithId present)
+  const { data: sourcePostData, isLoading: sourceLoading } = usePost(linkWithId || "");
+
+  // If translating, wait for source post to load before rendering form
+  if (linkWithId && sourceLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="h-8 w-64 animate-pulse rounded bg-muted" />
+        <div className="h-96 animate-pulse rounded-lg bg-muted" />
+      </div>
+    );
+  }
+
+  // Build defaults from source post (translation) or empty
+  const defaults: FormDefaults = linkWithId && sourcePostData?.data
+    ? {
+        title: sourcePostData.data.title,
+        content: sourcePostData.data.content,
+        excerpt: sourcePostData.data.excerpt || "",
+        categoryId: sourcePostData.data.categoryId,
+        selectedTagIds: sourcePostData.data.tags.map((t) => t.id),
+        slug: sourcePostData.data.slug,
+        metaTitle: sourcePostData.data.metaTitle || "",
+        metaDescription: sourcePostData.data.metaDescription || "",
+        metaKeywords: sourcePostData.data.metaKeywords || [],
+      }
+    : EMPTY_DEFAULTS;
+
+  return (
+    <NewPostForm
+      defaults={defaults}
+      language={initialLang}
+      linkWithId={linkWithId}
+    />
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect, use } from "react";
+import { useState, useRef, use } from "react";
 import { useRouter } from "next/navigation";
 import { usePost, useUpdatePost, usePublishPost, useUploadImage } from "@/hooks/useBlog";
 import { useCategories, useCreateCategory } from "@/hooks/useCategories";
@@ -27,12 +27,15 @@ import { toast } from "sonner";
 import { generateSlug } from "@/lib/utils";
 import Link from "next/link";
 import Image from "next/image";
+import type { PostWithRelations } from "@/types";
 
-export default function EditBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
-  const { id } = use(params);
+/* ------------------------------------------------------------------ */
+/*  Inner form — only rendered once post data is available, so         */
+/*  useState initialisers can safely use the loaded data.              */
+/* ------------------------------------------------------------------ */
+function EditPostForm({ post, id }: { post: PostWithRelations; id: string }) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { data: postData, isLoading: postLoading } = usePost(id);
   const updatePost = useUpdatePost();
   const publishPost = usePublishPost();
   const uploadImage = useUploadImage();
@@ -41,36 +44,18 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
   const createCategory = useCreateCategory();
   const createTag = useCreateTag();
 
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [excerpt, setExcerpt] = useState("");
-  const [categoryId, setCategoryId] = useState("");
-  const [selectedTagIds, setSelectedTagIds] = useState<string[]>([]);
-  const [featuredImage, setFeaturedImage] = useState("");
-  const [slug, setSlug] = useState("");
-  const [metaTitle, setMetaTitle] = useState("");
-  const [metaDescription, setMetaDescription] = useState("");
-  const [metaKeywords, setMetaKeywords] = useState<string[]>([]);
+  const [title, setTitle] = useState(post.title);
+  const [content, setContent] = useState(post.content);
+  const [excerpt, setExcerpt] = useState(post.excerpt || "");
+  const [categoryId, setCategoryId] = useState(post.categoryId);
+  const [selectedTagIds, setSelectedTagIds] = useState<string[]>(post.tags.map((t) => t.id));
+  const [featuredImage, setFeaturedImage] = useState(post.featuredImage || "");
+  const [slug, setSlug] = useState(post.slug);
+  const [metaTitle, setMetaTitle] = useState(post.metaTitle || "");
+  const [metaDescription, setMetaDescription] = useState(post.metaDescription || "");
+  const [metaKeywords, setMetaKeywords] = useState<string[]>(post.metaKeywords || []);
   const [newCategoryName, setNewCategoryName] = useState("");
   const [newTagName, setNewTagName] = useState("");
-  const [initialized, setInitialized] = useState(false);
-
-  useEffect(() => {
-    if (postData?.data && !initialized) {
-      const post = postData.data;
-      setTitle(post.title);
-      setContent(post.content);
-      setExcerpt(post.excerpt || "");
-      setCategoryId(post.categoryId);
-      setSelectedTagIds(post.tags.map((t) => t.id));
-      setFeaturedImage(post.featuredImage || "");
-      setSlug(post.slug);
-      setMetaTitle(post.metaTitle || "");
-      setMetaDescription(post.metaDescription || "");
-      setMetaKeywords(post.metaKeywords || []);
-      setInitialized(true);
-    }
-  }, [postData, initialized]);
 
   const handleFeaturedImageUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -143,7 +128,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
   };
 
   const handlePublishToggle = async () => {
-    const action = postData?.data?.status === "PUBLISHED" ? "unpublish" : "publish";
+    const action = post.status === "PUBLISHED" ? "unpublish" : "publish";
     try {
       await publishPost.mutateAsync({ id, action });
       toast.success(action === "publish" ? "Post published!" : "Post unpublished");
@@ -151,26 +136,6 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
       toast.error(err instanceof Error ? err.message : "Failed to update status");
     }
   };
-
-  if (postLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="h-8 w-64 animate-pulse rounded bg-muted" />
-        <div className="h-96 animate-pulse rounded-lg bg-muted" />
-      </div>
-    );
-  }
-
-  if (!postData?.data) {
-    return (
-      <div className="text-center py-12">
-        <p className="text-muted-foreground">Post not found.</p>
-        <Button asChild className="mt-4"><Link href="/blog">Back to posts</Link></Button>
-      </div>
-    );
-  }
-
-  const post = postData.data;
 
   return (
     <div className="space-y-6">
@@ -232,7 +197,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
               </div>
               <div className="space-y-2">
                 <Label>Content</Label>
-                {initialized && <BlogEditor content={content} onChange={setContent} />}
+                <BlogEditor content={content} onChange={setContent} />
               </div>
             </div>
 
@@ -319,4 +284,32 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
       </Tabs>
     </div>
   );
+}
+
+/* ------------------------------------------------------------------ */
+/*  Page wrapper — handles loading / not-found, then delegates        */
+/* ------------------------------------------------------------------ */
+export default function EditBlogPostPage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = use(params);
+  const { data: postData, isLoading: postLoading } = usePost(id);
+
+  if (postLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="h-8 w-64 animate-pulse rounded bg-muted" />
+        <div className="h-96 animate-pulse rounded-lg bg-muted" />
+      </div>
+    );
+  }
+
+  if (!postData?.data) {
+    return (
+      <div className="text-center py-12">
+        <p className="text-muted-foreground">Post not found.</p>
+        <Button asChild className="mt-4"><Link href="/blog">Back to posts</Link></Button>
+      </div>
+    );
+  }
+
+  return <EditPostForm post={postData.data} id={id} />;
 }
