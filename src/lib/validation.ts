@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { generateSlug } from "./utils";
 
 export const loginSchema = z.object({
   email: z.string().email("Invalid email address"),
@@ -34,7 +35,25 @@ export const productSchema = z.object({
   tags: z.array(z.string()).optional(),
 });
 
+export const createPostSchema = z.object({
+  title: z.string().min(1, "Title is required").max(200),
+  slug: z.string().optional(),
+  content: z.string().min(1, "Content is required"),
+  excerpt: z.string().max(160).optional(),
+  categoryId: z.string().min(1, "Category is required"),
+  tagIds: z.array(z.string()).optional(),
+  featuredImage: z.string().optional(),
+  metaTitle: z.string().max(60).optional(),
+  metaDescription: z.string().max(160).optional(),
+  metaKeywords: z.array(z.string()).optional(),
+  status: z.enum(["DRAFT", "SCHEDULED", "PUBLISHED", "ARCHIVED"]).optional(),
+}).transform((data) => ({
+  ...data,
+  slug: data.slug || generateSlug(data.title),
+}));
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type PostInput = z.infer<typeof postSchema>;
 export type ProductInput = z.infer<typeof productSchema>;
+export type CreatePostInput = z.infer<typeof createPostSchema>;

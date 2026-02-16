@@ -30,3 +30,19 @@ export interface PaginationParams {
   status?: PostStatus;
   categoryId?: string;
 }
+
+export interface CategoryWithCount extends Category {
+  _count: { posts: number };
+}
+
+export interface TagWithCount extends Tag {
+  _count: { posts: number };
+}
+
+export interface PostListResponse {
+  posts: PostWithRelations[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
