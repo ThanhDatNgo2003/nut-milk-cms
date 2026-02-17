@@ -3,6 +3,13 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
+import {
+  LayoutDashboard,
+  FileText,
+  Package,
+  BarChart3,
+  Settings,
+} from "lucide-react";
 
 interface DashboardNavProps {
   user: {
@@ -13,12 +20,14 @@ interface DashboardNavProps {
 }
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: "grid" },
-  { href: "/blog", label: "Blog Posts", icon: "file-text" },
-  { href: "/products", label: "Products", icon: "package" },
-  { href: "/analytics", label: "Analytics", icon: "bar-chart" },
-  { href: "/settings", label: "Settings", icon: "settings" },
+  { href: "/", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/blog", label: "Blog Posts", icon: FileText },
+  { href: "/products", label: "Products", icon: Package },
+  { href: "/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/settings", label: "Settings", icon: Settings },
 ];
+
+export { navItems };
 
 export function DashboardNav({ user }: DashboardNavProps) {
   const pathname = usePathname();
@@ -53,6 +62,7 @@ export function DashboardNav({ user }: DashboardNavProps) {
                   : "text-muted-foreground hover:bg-muted hover:text-foreground"
               )}
             >
+              <item.icon className="h-4 w-4" />
               {item.label}
             </Link>
           );

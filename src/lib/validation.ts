@@ -54,8 +54,35 @@ export const createPostSchema = z.object({
   slug: data.slug || generateSlug(data.title),
 }));
 
+export const createProductSchema = z.object({
+  name: z.string().min(1, "Name is required").max(200),
+  slug: z.string().optional(),
+  description: z.string().min(1, "Description is required"),
+  price: z.number().positive("Price must be positive"),
+  image: z.string().min(1, "Main image is required"),
+  images: z.array(z.string()).optional().default([]),
+  category: z.string().optional(),
+  tags: z.array(z.string()).optional().default([]),
+  variants: z.array(z.object({
+    size: z.string().min(1, "Size is required"),
+    price: z.number().positive("Variant price must be positive"),
+    stock: z.number().int().min(0, "Stock cannot be negative"),
+  })).optional().default([]),
+  isFeatured: z.boolean().optional().default(false),
+  featuredPosition: z.number().int().min(1).max(3).optional(),
+  featuredLabel: z.string().optional(),
+  metaTitle: z.string().max(60).optional(),
+  metaDescription: z.string().max(160).optional(),
+  metaKeywords: z.array(z.string()).optional(),
+  language: z.enum(["VI", "EN"]).optional().default("VI"),
+}).transform((data) => ({
+  ...data,
+  slug: data.slug || generateSlug(data.name),
+}));
+
 export type LoginInput = z.infer<typeof loginSchema>;
 export type RegisterInput = z.infer<typeof registerSchema>;
 export type PostInput = z.infer<typeof postSchema>;
 export type ProductInput = z.infer<typeof productSchema>;
 export type CreatePostInput = z.infer<typeof createPostSchema>;
+export type CreateProductInput = z.infer<typeof createProductSchema>;

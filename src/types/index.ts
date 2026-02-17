@@ -60,3 +60,20 @@ export interface PostListResponse {
   limit: number;
   totalPages: number;
 }
+
+export interface ProductListResponse {
+  products: ProductWithVariants[];
+  total: number;
+  page: number;
+  limit: number;
+  totalPages: number;
+}
+
+export interface ProductPaginationParams {
+  page?: number;
+  limit?: number;
+  search?: string;
+  category?: string;
+  featured?: boolean;
+  language?: Language;
+}
