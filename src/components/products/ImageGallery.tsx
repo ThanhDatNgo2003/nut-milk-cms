@@ -117,7 +117,7 @@ export default function ImageGallery({
         <input
           ref={mainInputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png,image/webp,image/gif"
           onChange={handleMainImageUpload}
           className="hidden"
         />
@@ -187,7 +187,7 @@ export default function ImageGallery({
         <input
           ref={galleryInputRef}
           type="file"
-          accept="image/jpeg,image/png,image/webp"
+          accept="image/jpeg,image/png,image/webp,image/gif"
           multiple
           onChange={handleGalleryUpload}
           className="hidden"

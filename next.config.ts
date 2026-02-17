@@ -3,12 +3,10 @@ import type { NextConfig } from "next";
 const nextConfig: NextConfig = {
   output: "standalone",
   images: {
-    remotePatterns: [
-      {
-        protocol: "https",
-        hostname: "res.cloudinary.com",
-      },
-    ],
+    // Local uploads are served as static files from /public/uploads/
+    // and rendered with unoptimized={true} in ResponsiveImage component.
+    // No remote patterns needed for self-hosted storage.
+    remotePatterns: [],
   },
 };
 
