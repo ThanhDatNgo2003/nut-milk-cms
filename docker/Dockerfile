@@ -41,8 +41,9 @@ RUN npm run build
 FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Add non-root user for security
-RUN addgroup --system --gid 1001 nodejs && \
+# Add non-root user for security + su-exec for entrypoint privilege drop
+RUN apk add --no-cache su-exec && \
+    addgroup --system --gid 1001 nodejs && \
     adduser --system --uid 1001 nextjs
 
 # Set production environment
@@ -73,7 +74,8 @@ RUN chmod +x ./entrypoint.sh
 # Set correct permissions
 RUN chown -R nextjs:nodejs /app
 
-USER nextjs
+# NOTE: No USER directive here — entrypoint runs as root to fix volume
+# permissions, then drops to nextjs via su-exec.
 
 EXPOSE 3000
 
