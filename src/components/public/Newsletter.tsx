@@ -14,7 +14,7 @@ export default function Newsletter() {
     e.preventDefault();
 
     if (!email) {
-      toast.error("Vui long nhap email cua ban");
+      toast.error("Vui lòng nhập email của bạn");
       return;
     }
 
@@ -30,13 +30,13 @@ export default function Newsletter() {
       const data = await res.json();
 
       if (res.ok) {
-        toast.success("Dang ky thanh cong! Cam on ban da quan tam.");
+        toast.success("Đăng ký thành công! Cảm ơn bạn đã quan tâm.");
         setEmail("");
       } else {
-        toast.error(data.error || "Co loi xay ra, vui long thu lai.");
+        toast.error(data.error || "Có lỗi xảy ra, vui lòng thử lại.");
       }
     } catch {
-      toast.error("Khong the ket noi. Vui long thu lai sau.");
+      toast.error("Không thể kết nối. Vui lòng thử lại sau.");
     } finally {
       setIsSubmitting(false);
     }
@@ -45,27 +45,29 @@ export default function Newsletter() {
   return (
     <section
       id="contact"
-      className="bg-gradient-to-br from-brand-brown-dark via-brand-brown to-brand-gold py-16 md:py-24"
+      className="bg-gradient-to-br from-brand-leaf via-brand-green-dark to-brand-green py-16 md:py-24"
     >
       <div className="mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
-        <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
-          <Mail className="h-6 w-6 text-white" />
+        <div className="animate-on-scroll">
+          <div className="mb-3 inline-flex h-12 w-12 items-center justify-center rounded-full bg-white/10">
+            <Mail className="h-6 w-6 text-white" />
+          </div>
+          <h2 className="mb-4 font-raleway text-3xl font-bold text-white md:text-4xl">
+            Nhận Công Thức & Tips Độc Quyền
+          </h2>
+          <p className="mb-8 font-open-sans text-white/80">
+            Đăng ký để nhận những công thức sữa hạt mới, mẹo dinh dưỡng và ưu đãi
+            đặc biệt từ Hạt Mộc.
+          </p>
         </div>
-        <h2 className="mb-4 font-raleway text-3xl font-bold text-white md:text-4xl">
-          Nhan Cong Thuc & Tips Doc Quyen
-        </h2>
-        <p className="mb-8 font-open-sans text-white/80">
-          Dang ky de nhan nhung cong thuc sua hat moi, meo dinh duong va uu dai
-          dac biet tu Nut Milk.
-        </p>
 
         <form
           onSubmit={handleSubmit}
-          className="mx-auto flex max-w-md flex-col gap-3 sm:flex-row"
+          className="animate-on-scroll animate-delay-200 mx-auto flex max-w-md flex-col gap-3 sm:flex-row"
         >
           <Input
             type="email"
-            placeholder="Email cua ban..."
+            placeholder="Email của bạn..."
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="h-12 flex-1 rounded-full border-white/20 bg-white/10 px-5 text-white placeholder:text-white/50 focus:border-white/40 focus:ring-white/20"
@@ -74,21 +76,21 @@ export default function Newsletter() {
           <Button
             type="submit"
             disabled={isSubmitting}
-            className="h-12 rounded-full bg-white px-8 font-raleway font-semibold text-brand-brown hover:bg-brand-offwhite transition-colors"
+            className="h-12 rounded-full bg-white px-8 font-raleway font-semibold text-brand-green transition-all duration-300 hover:bg-brand-cream hover:shadow-lg hover:scale-105"
           >
             {isSubmitting ? (
               <span className="flex items-center gap-2">
-                <span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-brown border-t-transparent" />
-                Dang ky...
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-brand-green border-t-transparent" />
+                Đang ký...
               </span>
             ) : (
-              "Dang Ky"
+              "Đăng Ký"
             )}
           </Button>
         </form>
 
-        <p className="mt-4 font-open-sans text-xs text-white/50">
-          Chung toi ton trong quyen rieng tu cua ban. Huy dang ky bat cu luc nao.
+        <p className="animate-on-scroll animate-delay-300 mt-4 font-open-sans text-xs text-white/50">
+          Chúng tôi tôn trọng quyền riêng tư của bạn. Huỷ đăng ký bất cứ lúc nào.
         </p>
       </div>
     </section>

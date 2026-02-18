@@ -44,17 +44,17 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
           </SheetTrigger>
           <SheetContent side="left" className="w-64 p-0">
             <div className="flex h-14 items-center border-b px-4">
-              <span className="text-lg font-semibold">Nut Milk CMS</span>
+              <span className="text-lg font-semibold">Hạt Mộc CMS</span>
             </div>
             <nav className="space-y-1 p-3">
               {navItems.map((item) => {
                 const isActive =
-                  item.href === "/"
-                    ? pathname === "/"
+                  item.href === "/dashboard"
+                    ? pathname === "/dashboard"
                     : pathname.startsWith(item.href);
 
                 // Only show settings to admins
-                if (item.href === "/settings" && user.role !== "ADMIN") {
+                if (item.href === "/dashboard/settings" && user.role !== "ADMIN") {
                   return null;
                 }
 
@@ -77,7 +77,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             </nav>
           </SheetContent>
         </Sheet>
-        <h2 className="text-lg font-semibold md:hidden">Nut Milk CMS</h2>
+        <h2 className="text-lg font-semibold md:hidden">Hạt Mộc CMS</h2>
       </div>
       <div className="flex items-center gap-4">
         <DropdownMenu>
@@ -98,7 +98,7 @@ export function DashboardHeader({ user }: DashboardHeaderProps) {
             </div>
             <DropdownMenuSeparator />
             <DropdownMenuItem asChild>
-              <a href="/settings">Settings</a>
+              <Link href="/dashboard/settings">Settings</Link>
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem

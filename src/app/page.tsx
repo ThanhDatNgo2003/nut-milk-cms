@@ -8,28 +8,29 @@ import BrandStory from "@/components/public/BrandStory";
 import BlogHighlights from "@/components/public/BlogHighlights";
 import Newsletter from "@/components/public/Newsletter";
 import PublicFooter from "@/components/public/PublicFooter";
+import ScrollAnimationProvider from "@/components/public/ScrollAnimationProvider";
 
 export const metadata: Metadata = {
-  title: "Nut Milk | Sua Hat Tuoi 100% Tu Nhien",
+  title: "Hạt Mộc | Sữa Hạt Tươi 100% Tự Nhiên",
   description:
-    "Sua hat tuoi nguyen chat, khong chat bao quan. San pham huu co, giau dinh duong, tot cho suc khoe. Giao hang tan noi tai Ho Chi Minh City.",
+    "Sữa hạt tươi nguyên chất, không chất bảo quản. Sản phẩm hữu cơ, giàu dinh dưỡng, tốt cho sức khoẻ. Giao hàng tận nơi tại Hồ Chí Minh.",
   keywords: [
-    "sua hat",
-    "sua hat tuoi",
-    "nut milk",
-    "sua huu co",
-    "sua hat dieu",
-    "sua hanh nhan",
+    "sữa hạt",
+    "sữa hạt tươi",
+    "hạt mộc",
+    "sữa hữu cơ",
+    "sữa hạt điều",
+    "sữa hạnh nhân",
     "healthy drink",
-    "Ho Chi Minh",
+    "Hồ Chí Minh",
   ],
   openGraph: {
-    title: "Nut Milk | Sua Hat Tuoi 100% Tu Nhien",
+    title: "Hạt Mộc | Sữa Hạt Tươi 100% Tự Nhiên",
     description:
-      "Sua hat tuoi nguyen chat, khong chat bao quan. San pham huu co, giau dinh duong.",
+      "Sữa hạt tươi nguyên chất, không chất bảo quản. Sản phẩm hữu cơ, giàu dinh dưỡng.",
     type: "website",
     locale: "vi_VN",
-    siteName: "Nut Milk",
+    siteName: "Hạt Mộc",
   },
 };
 
@@ -106,15 +107,17 @@ export default async function HomePage() {
   ]);
 
   return (
-    <main className="min-h-screen">
-      <Navigation />
-      <HeroSection />
-      <WhyChooseUs />
-      <ProductCarousel products={featuredProducts} />
-      <BrandStory />
-      <BlogHighlights posts={latestPosts} />
-      <Newsletter />
-      <PublicFooter />
-    </main>
+    <ScrollAnimationProvider>
+      <main className="min-h-screen bg-white">
+        <Navigation />
+        <HeroSection />
+        <WhyChooseUs />
+        <ProductCarousel products={featuredProducts} />
+        <BrandStory />
+        <BlogHighlights posts={latestPosts} />
+        <Newsletter />
+        <PublicFooter />
+      </main>
+    </ScrollAnimationProvider>
   );
 }

@@ -22,7 +22,7 @@ export default function TranslateBlogPostPage({
         post.language as SupportedLanguage
       );
       router.replace(
-        `/blog/new?from=${id}&lang=${targetLang.toLowerCase()}`
+        `/dashboard/blog/new?from=${id}&lang=${targetLang.toLowerCase()}`
       );
     }
   }, [postData, id, router]);

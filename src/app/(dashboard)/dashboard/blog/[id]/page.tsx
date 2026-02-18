@@ -142,7 +142,7 @@ function EditPostForm({ post, id }: { post: PostWithRelations; id: string }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/blog"><ArrowLeft className="h-4 w-4" /></Link>
+            <Link href="/dashboard/blog"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <div>
             <h1 className="text-2xl font-bold">Edit Post</h1>
@@ -156,13 +156,13 @@ function EditPostForm({ post, id }: { post: PostWithRelations; id: string }) {
         </div>
         <div className="flex gap-2">
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/blog/new?from=${id}&lang=${getOppositeLanguage(post.language as SupportedLanguage).toLowerCase()}`}>
+            <Link href={`/dashboard/blog/new?from=${id}&lang=${getOppositeLanguage(post.language as SupportedLanguage).toLowerCase()}`}>
               <Languages className="mr-2 h-4 w-4" />
               Translate to {getOppositeLanguage(post.language as SupportedLanguage)}
             </Link>
           </Button>
           <Button variant="outline" size="sm" asChild>
-            <Link href={`/blog/${id}/preview`}><Eye className="mr-2 h-4 w-4" /> Preview</Link>
+            <Link href={`/dashboard/blog/${id}/preview`}><Eye className="mr-2 h-4 w-4" /> Preview</Link>
           </Button>
           <Button variant="outline" size="sm" onClick={handlePublishToggle} disabled={publishPost.isPending}>
             {post.status === "PUBLISHED" ? (
@@ -206,7 +206,7 @@ function EditPostForm({ post, id }: { post: PostWithRelations; id: string }) {
                 <Label>Featured Image</Label>
                 {featuredImage ? (
                   <div className="relative aspect-video w-full overflow-hidden rounded-md">
-                    <Image src={featuredImage} alt="Featured" fill className="object-cover" sizes="320px" />
+                    <Image src={featuredImage} alt="Featured" fill className="object-cover" sizes="320px" unoptimized />
                     <Button variant="destructive" size="sm" className="absolute top-2 right-2 h-7 w-7 p-0" onClick={() => setFeaturedImage("")}>
                       <X className="h-3 w-3" />
                     </Button>
@@ -263,7 +263,7 @@ function EditPostForm({ post, id }: { post: PostWithRelations; id: string }) {
                           {getLanguageFlag(t.language as SupportedLanguage)} {t.title}
                         </span>
                         <Button variant="ghost" size="sm" asChild>
-                          <Link href={`/blog/${t.id}`} className="text-xs">
+                          <Link href={`/dashboard/blog/${t.id}`} className="text-xs">
                             Edit
                           </Link>
                         </Button>
@@ -306,7 +306,7 @@ export default function EditBlogPostPage({ params }: { params: Promise<{ id: str
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Post not found.</p>
-        <Button asChild className="mt-4"><Link href="/blog">Back to posts</Link></Button>
+        <Button asChild className="mt-4"><Link href="/dashboard/blog">Back to posts</Link></Button>
       </div>
     );
   }

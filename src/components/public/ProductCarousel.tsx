@@ -46,43 +46,43 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
   }
 
   return (
-    <section id="products" className="py-16 md:py-24">
+    <section id="products" className="bg-brand-cream py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 font-raleway text-3xl font-bold text-brand-brown md:text-4xl">
-            San Pham Noi Bat
+        <div className="animate-on-scroll mb-12 text-center">
+          <h2 className="mb-4 font-raleway text-3xl font-bold text-brand-charcoal md:text-4xl">
+            Sản Phẩm <span className="text-brand-green">Nổi Bật</span>
           </h2>
           <p className="mx-auto max-w-2xl font-open-sans text-brand-gray">
-            Nhung san pham sua hat duoc yeu thich nhat, duoc lua chon boi hang
-            nghin khach hang.
+            Những sản phẩm sữa hạt được yêu thích nhất, được lựa chọn bởi hàng
+            nghìn khách hàng.
           </p>
         </div>
 
         {/* Carousel */}
-        <div className="relative">
+        <div className="animate-on-scroll animate-delay-200 relative">
           {/* Navigation buttons */}
           {products.length > 1 && (
             <>
               <button
                 onClick={() => scroll("left")}
-                className="absolute -left-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-lg transition-all hover:bg-brand-offwhite md:flex items-center justify-center"
-                aria-label="Previous"
+                className="absolute -left-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all duration-300 hover:bg-brand-cream hover:shadow-xl md:flex items-center justify-center"
+                aria-label="Sản phẩm trước"
               >
-                <ChevronLeft className="h-5 w-5 text-brand-brown" />
+                <ChevronLeft className="h-5 w-5 text-brand-green" />
               </button>
               <button
                 onClick={() => scroll("right")}
-                className="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 shadow-lg transition-all hover:bg-brand-offwhite md:flex items-center justify-center"
-                aria-label="Next"
+                className="absolute -right-4 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2.5 shadow-lg transition-all duration-300 hover:bg-brand-cream hover:shadow-xl md:flex items-center justify-center"
+                aria-label="Sản phẩm tiếp"
               >
-                <ChevronRight className="h-5 w-5 text-brand-brown" />
+                <ChevronRight className="h-5 w-5 text-brand-green" />
               </button>
             </>
           )}
 
           <div
             ref={scrollRef}
-            className="flex snap-x snap-mandatory gap-6 overflow-x-auto scrollbar-hide pb-4"
+            className="flex snap-x snap-mandatory gap-6 overflow-x-auto pb-4"
             style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
           >
             {products.map((product) => (
@@ -90,22 +90,22 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                 key={product.id}
                 className="w-[280px] flex-shrink-0 snap-center md:w-[340px]"
               >
-                <div className="group overflow-hidden rounded-2xl border bg-white shadow-sm transition-all duration-300 hover:shadow-lg">
+                <div className="group overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1">
                   {/* Product Image */}
-                  <div className="relative h-[220px] overflow-hidden bg-brand-offwhite md:h-[260px]">
+                  <div className="relative h-[220px] overflow-hidden bg-brand-cream md:h-[260px]">
                     {product.image ? (
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                        className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                       />
                     ) : (
                       <div className="flex h-full w-full items-center justify-center text-brand-gray">
-                        <span className="text-4xl">🥛</span>
+                        <span className="text-5xl">🥛</span>
                       </div>
                     )}
                     {product.featuredLabel && (
-                      <span className="absolute left-3 top-3 rounded-full bg-brand-gold px-3 py-1 text-xs font-semibold text-white shadow">
+                      <span className="absolute left-3 top-3 rounded-full bg-brand-green px-3 py-1 text-xs font-semibold text-white shadow">
                         {product.featuredLabel}
                       </span>
                     )}
@@ -121,36 +121,25 @@ export default function ProductCarousel({ products }: ProductCarouselProps) {
                     <h3 className="mb-2 font-raleway text-lg font-semibold text-brand-charcoal">
                       {product.name}
                     </h3>
-                    <p className="mb-4 font-open-sans text-lg font-bold text-brand-brown">
-                      {product.price.toLocaleString("vi-VN")} VND
+                    <p className="mb-4 font-open-sans text-lg font-bold text-brand-green">
+                      {product.price.toLocaleString("vi-VN")} VNĐ
                     </p>
                     {product.variants.length > 0 && (
                       <p className="mb-4 text-xs text-brand-gray">
-                        {product.variants.length} kich thuoc co san
+                        {product.variants.length} kích thước có sẵn
                       </p>
                     )}
                     <Button
                       variant="outline"
-                      className="w-full rounded-full border-brand-brown text-brand-brown hover:bg-brand-brown hover:text-white transition-colors"
+                      className="w-full rounded-full border-brand-green text-brand-green transition-all duration-300 hover:bg-brand-green hover:text-white hover:shadow-md"
                     >
-                      Xem Chi Tiet
+                      Xem Chi Tiết
                     </Button>
                   </div>
                 </div>
               </div>
             ))}
           </div>
-        </div>
-
-        {/* View all CTA */}
-        <div className="mt-10 text-center">
-          <a
-            href="#"
-            className="inline-flex items-center font-raleway text-sm font-semibold text-brand-brown hover:text-brand-brown-dark transition-colors"
-          >
-            Xem Tat Ca San Pham
-            <ChevronRight className="ml-1 h-4 w-4" />
-          </a>
         </div>
       </div>
     </section>

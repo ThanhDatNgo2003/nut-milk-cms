@@ -90,7 +90,7 @@ export default function ImageGallery({
               alt="Main product"
               fill
               className="object-cover"
-              sizes="320px"
+              sizes="320px" unoptimized
             />
             <Button
               type="button"
@@ -151,7 +151,7 @@ export default function ImageGallery({
                   alt={`Gallery ${index + 1}`}
                   fill
                   className="object-cover"
-                  sizes="160px"
+                  sizes="160px" unoptimized
                 />
                 <div className="absolute inset-0 bg-black/0 group-hover:bg-black/40 transition-colors flex items-center justify-center gap-1 opacity-0 group-hover:opacity-100">
                   <Button

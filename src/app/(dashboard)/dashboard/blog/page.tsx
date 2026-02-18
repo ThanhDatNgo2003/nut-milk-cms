@@ -77,7 +77,7 @@ export default function BlogListPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="/blog/new">
+          <Link href="/dashboard/blog/new">
             <Plus className="mr-2 h-4 w-4" /> New Post
           </Link>
         </Button>
@@ -165,7 +165,7 @@ export default function BlogListPage() {
         <div className="rounded-lg border border-dashed p-12 text-center">
           <p className="text-muted-foreground">No posts found.</p>
           <Button asChild className="mt-4">
-            <Link href="/blog/new">Create your first post</Link>
+            <Link href="/dashboard/blog/new">Create your first post</Link>
           </Button>
         </div>
       ) : (

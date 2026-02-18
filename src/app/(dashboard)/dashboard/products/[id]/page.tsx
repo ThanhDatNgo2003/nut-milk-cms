@@ -106,7 +106,7 @@ function EditProductForm({ product, id }: { product: ProductWithVariants; id: st
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/products"><ArrowLeft className="h-4 w-4" /></Link>
+            <Link href="/dashboard/products"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <div>
             <h1 className="text-2xl font-bold">Edit Product</h1>
@@ -296,7 +296,7 @@ export default function EditProductPage({ params }: { params: Promise<{ id: stri
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Product not found.</p>
-        <Button asChild className="mt-4"><Link href="/products">Back to products</Link></Button>
+        <Button asChild className="mt-4"><Link href="/dashboard/products">Back to products</Link></Button>
       </div>
     );
   }

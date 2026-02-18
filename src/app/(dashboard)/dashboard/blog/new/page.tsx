@@ -165,7 +165,7 @@ function NewPostForm({
       });
 
       toast.success(status === "PUBLISHED" ? "Post published!" : "Draft saved!");
-      router.push(`/blog/${result.data.id}`);
+      router.push(`/dashboard/blog/${result.data.id}`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to save post");
     }
@@ -176,7 +176,7 @@ function NewPostForm({
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/blog"><ArrowLeft className="h-4 w-4" /></Link>
+            <Link href="/dashboard/blog"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <h1 className="text-2xl font-bold">
             {linkWithId ? "Translate Blog Post" : "New Blog Post"}

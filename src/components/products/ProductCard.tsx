@@ -37,7 +37,7 @@ export default function ProductCard({
             alt={product.name}
             fill
             className="object-cover"
-            sizes="80px"
+            sizes="80px" unoptimized
           />
         ) : (
           <div className="flex h-full w-full items-center justify-center text-muted-foreground text-xs">

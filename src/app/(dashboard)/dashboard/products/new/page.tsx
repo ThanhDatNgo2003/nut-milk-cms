@@ -84,7 +84,7 @@ export default function NewProductPage() {
       });
 
       toast.success("Product created!");
-      router.push(`/products/${result.data.id}`);
+      router.push(`/dashboard/products/${result.data.id}`);
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Failed to create product");
     }
@@ -95,7 +95,7 @@ export default function NewProductPage() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/products"><ArrowLeft className="h-4 w-4" /></Link>
+            <Link href="/dashboard/products"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <h1 className="text-2xl font-bold">New Product</h1>
         </div>

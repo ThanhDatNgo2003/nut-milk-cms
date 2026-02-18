@@ -79,7 +79,7 @@ export default function DashboardPage() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base">Recent Posts</CardTitle>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/blog">View all</Link>
+              <Link href="/dashboard/blog">View all</Link>
             </Button>
           </CardHeader>
           <CardContent>
@@ -99,7 +99,7 @@ export default function DashboardPage() {
           <CardHeader className="flex flex-row items-center justify-between">
             <CardTitle className="text-base">Featured Products</CardTitle>
             <Button variant="ghost" size="sm" asChild>
-              <Link href="/products">View all</Link>
+              <Link href="/dashboard/products">View all</Link>
             </Button>
           </CardHeader>
           <CardContent>
@@ -123,19 +123,19 @@ export default function DashboardPage() {
         </CardHeader>
         <CardContent className="flex flex-wrap gap-3">
           <Button asChild>
-            <Link href="/blog/new">
+            <Link href="/dashboard/blog/new">
               <PlusCircle className="mr-2 h-4 w-4" />
               New Post
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/products/new">
+            <Link href="/dashboard/products/new">
               <Package className="mr-2 h-4 w-4" />
               New Product
             </Link>
           </Button>
           <Button variant="outline" asChild>
-            <Link href="/analytics">
+            <Link href="/dashboard/analytics">
               <BarChart2 className="mr-2 h-4 w-4" />
               View Analytics
             </Link>

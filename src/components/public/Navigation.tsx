@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
+import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
   Sheet,
@@ -14,23 +14,37 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { href: "#home", label: "Trang chu" },
-  { href: "#products", label: "San Pham" },
-  { href: "#story", label: "Ve Chung Toi" },
+  { href: "#home", label: "Trang Chủ" },
+  { href: "#products", label: "Sản Phẩm" },
+  { href: "#story", label: "Về Chúng Tôi" },
   { href: "#blog", label: "Blog" },
-  { href: "#contact", label: "Lien He" },
+  { href: "#contact", label: "Liên Hệ" },
 ];
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => setScrolled(window.scrollY > 20);
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 w-full border-b bg-white/95 backdrop-blur supports-[backdrop-filter]:bg-white/80">
+    <header
+      className={cn(
+        "sticky top-0 z-50 w-full transition-all duration-300",
+        scrolled
+          ? "border-b bg-white/95 backdrop-blur shadow-sm supports-[backdrop-filter]:bg-white/80"
+          : "bg-white"
+      )}
+    >
       <div className="mx-auto flex h-[70px] max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-2">
-          <span className="text-2xl font-bold font-playfair text-brand-brown">
-            Nut Milk
+        <Link href="/" className="flex items-center gap-2 group">
+          <span className="text-2xl font-bold font-playfair text-brand-green transition-colors group-hover:text-brand-green-dark">
+            🌿 Hạt Mộc
           </span>
         </Link>
 
@@ -40,7 +54,7 @@ export default function Navigation() {
             <a
               key={link.href}
               href={link.href}
-              className="text-sm font-medium font-open-sans text-brand-charcoal hover:text-brand-brown transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-brown after:transition-all hover:after:w-full"
+              className="text-sm font-medium font-open-sans text-brand-charcoal hover:text-brand-green transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-green after:transition-all after:duration-300 hover:after:w-full"
             >
               {link.label}
             </a>
@@ -51,9 +65,9 @@ export default function Navigation() {
         <div className="hidden md:flex items-center gap-4">
           <Link
             href="/dashboard"
-            className="text-sm font-medium text-brand-gray hover:text-brand-brown transition-colors"
+            className="text-sm font-medium text-brand-gray hover:text-brand-green transition-colors"
           >
-            Admin
+            Quản Trị
           </Link>
         </div>
 
@@ -66,11 +80,11 @@ export default function Navigation() {
             </Button>
           </SheetTrigger>
           <SheetContent side="right" className="w-[280px] p-0">
-            <SheetTitle className="sr-only">Menu</SheetTitle>
+            <SheetTitle className="sr-only">Menu điều hướng</SheetTitle>
             <div className="flex flex-col h-full">
-              <div className="flex items-center justify-between border-b px-4 py-4">
-                <span className="text-xl font-bold font-playfair text-brand-brown">
-                  Nut Milk
+              <div className="flex items-center border-b px-4 py-4">
+                <span className="text-xl font-bold font-playfair text-brand-green">
+                  🌿 Hạt Mộc
                 </span>
               </div>
               <nav className="flex flex-col gap-1 p-4">
@@ -78,7 +92,7 @@ export default function Navigation() {
                   <SheetClose key={link.href} asChild>
                     <a
                       href={link.href}
-                      className="rounded-md px-3 py-2.5 text-sm font-medium font-open-sans text-brand-charcoal hover:bg-brand-offwhite hover:text-brand-brown transition-colors"
+                      className="rounded-md px-3 py-2.5 text-sm font-medium font-open-sans text-brand-charcoal hover:bg-brand-cream hover:text-brand-green transition-colors"
                     >
                       {link.label}
                     </a>
@@ -88,9 +102,9 @@ export default function Navigation() {
                   <SheetClose asChild>
                     <Link
                       href="/dashboard"
-                      className="block rounded-md px-3 py-2.5 text-sm font-medium text-brand-gray hover:bg-brand-offwhite hover:text-brand-brown transition-colors"
+                      className="block rounded-md px-3 py-2.5 text-sm font-medium text-brand-gray hover:bg-brand-cream hover:text-brand-green transition-colors"
                     >
-                      Admin Dashboard
+                      Quản Trị Dashboard
                     </Link>
                   </SheetClose>
                 </div>

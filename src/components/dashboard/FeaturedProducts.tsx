@@ -39,7 +39,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
                 alt={product.name}
                 fill
                 className="object-cover"
-                sizes="56px"
+                sizes="56px" unoptimized
               />
             </div>
             <div className="min-w-0 flex-1 space-y-0.5">

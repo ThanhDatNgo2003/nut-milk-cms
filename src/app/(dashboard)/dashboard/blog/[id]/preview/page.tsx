@@ -24,7 +24,7 @@ export default function PreviewBlogPostPage({ params }: { params: Promise<{ id: 
     return (
       <div className="text-center py-12">
         <p className="text-muted-foreground">Post not found.</p>
-        <Button asChild className="mt-4"><Link href="/blog">Back to posts</Link></Button>
+        <Button asChild className="mt-4"><Link href="/dashboard/blog">Back to posts</Link></Button>
       </div>
     );
   }
@@ -34,12 +34,12 @@ export default function PreviewBlogPostPage({ params }: { params: Promise<{ id: 
       <div className="flex items-center justify-between border-b pb-4">
         <div className="flex items-center gap-3">
           <Button variant="ghost" size="sm" asChild>
-            <Link href="/blog"><ArrowLeft className="h-4 w-4" /></Link>
+            <Link href="/dashboard/blog"><ArrowLeft className="h-4 w-4" /></Link>
           </Button>
           <span className="text-sm font-medium text-muted-foreground">Preview Mode</span>
         </div>
         <Button variant="outline" size="sm" asChild>
-          <Link href={`/blog/${id}`}><Pencil className="mr-2 h-4 w-4" /> Edit</Link>
+          <Link href={`/dashboard/blog/${id}`}><Pencil className="mr-2 h-4 w-4" /> Edit</Link>
         </Button>
       </div>
 

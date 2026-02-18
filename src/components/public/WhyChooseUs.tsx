@@ -3,52 +3,52 @@ import { Leaf, Sparkles, Heart } from "lucide-react";
 const features = [
   {
     icon: Leaf,
-    title: "100% Organic",
+    title: "100% Hữu Cơ",
     description:
-      "Nguyen lieu huu co duoc chon loc ky luong, dam bao an toan va chat luong cao nhat cho suc khoe cua ban.",
+      "Nguyên liệu hữu cơ được chọn lọc kỹ lưỡng, đảm bảo an toàn và chất lượng cao nhất cho sức khoẻ của bạn.",
     color: "text-brand-green",
-    bgColor: "bg-green-50",
+    bgColor: "bg-brand-mint",
   },
   {
     icon: Sparkles,
-    title: "Tuoi Moi Ngay",
+    title: "Tươi Mới Mỗi Ngày",
     description:
-      "San xuat moi ngay, giao hang tan noi. Khong chat bao quan, khong phu gia, giu tron vi tu nhien.",
-    color: "text-brand-gold",
-    bgColor: "bg-amber-50",
+      "Sản xuất mỗi ngày, giao hàng tận nơi. Không chất bảo quản, không phụ gia, giữ trọn vị tự nhiên.",
+    color: "text-brand-green-dark",
+    bgColor: "bg-emerald-50",
   },
   {
     icon: Heart,
-    title: "Tot Cho Suc Khoe",
+    title: "Tốt Cho Sức Khoẻ",
     description:
-      "Giau dinh duong, tot cho tim mach, ho tro tieu hoa va tang cuong he mien dich tu nhien.",
-    color: "text-brand-green-fresh",
-    bgColor: "bg-emerald-50",
+      "Giàu dinh dưỡng, tốt cho tim mạch, hỗ trợ tiêu hoá và tăng cường hệ miễn dịch tự nhiên.",
+    color: "text-brand-green-light",
+    bgColor: "bg-green-50",
   },
 ];
 
 export default function WhyChooseUs() {
   return (
-    <section className="bg-brand-offwhite py-16 md:py-24">
+    <section className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 font-raleway text-3xl font-bold text-brand-brown md:text-4xl">
-            Tai Sao Chon Nut Milk?
+        <div className="animate-on-scroll mb-12 text-center">
+          <h2 className="mb-4 font-raleway text-3xl font-bold text-brand-charcoal md:text-4xl">
+            Tại Sao Chọn <span className="text-brand-green">Hạt Mộc</span>?
           </h2>
           <p className="mx-auto max-w-2xl font-open-sans text-brand-gray">
-            Chung toi cam ket mang den nhung san pham sua hat tot nhat, vi suc
-            khoe va hanh phuc cua ban.
+            Chúng tôi cam kết mang đến những sản phẩm sữa hạt tốt nhất, vì sức
+            khoẻ và hạnh phúc của bạn.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {features.map((feature) => (
+          {features.map((feature, i) => (
             <div
               key={feature.title}
-              className="group rounded-2xl bg-white p-8 shadow-sm transition-all duration-300 hover:shadow-lg hover:-translate-y-1"
+              className={`animate-on-scroll animate-delay-${(i + 1) * 100} group rounded-2xl bg-white p-8 border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-2 hover:border-brand-green/20`}
             >
               <div
-                className={`mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl ${feature.bgColor}`}
+                className={`mb-6 inline-flex h-14 w-14 items-center justify-center rounded-xl ${feature.bgColor} transition-transform duration-300 group-hover:scale-110`}
               >
                 <feature.icon className={`h-7 w-7 ${feature.color}`} />
               </div>

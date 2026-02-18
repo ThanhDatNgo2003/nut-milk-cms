@@ -40,7 +40,7 @@ export default function BlogCard({ post, onPublish, onDelete }: BlogCardProps) {
             alt={post.title}
             fill
             className="object-cover"
-            sizes="112px"
+            sizes="112px" unoptimized
           />
         </div>
       )}

@@ -72,7 +72,7 @@ export default function ProductsListPage() {
           </p>
         </div>
         <Button asChild>
-          <Link href="/products/new">
+          <Link href="/dashboard/products/new">
             <Plus className="mr-2 h-4 w-4" /> New Product
           </Link>
         </Button>
@@ -139,7 +139,7 @@ export default function ProductsListPage() {
         <div className="rounded-lg border border-dashed p-12 text-center">
           <p className="text-muted-foreground">No products found.</p>
           <Button asChild className="mt-4">
-            <Link href="/products/new">Create your first product</Link>
+            <Link href="/dashboard/products/new">Create your first product</Link>
           </Button>
         </div>
       ) : (

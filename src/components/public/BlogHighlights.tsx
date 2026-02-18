@@ -33,39 +33,39 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
   }
 
   return (
-    <section id="blog" className="bg-brand-offwhite py-16 md:py-24">
+    <section id="blog" className="bg-white py-16 md:py-24">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="mb-12 text-center">
-          <h2 className="mb-4 font-raleway text-3xl font-bold text-brand-brown md:text-4xl">
-            Bai Viet Moi Nhat
+        <div className="animate-on-scroll mb-12 text-center">
+          <h2 className="mb-4 font-raleway text-3xl font-bold text-brand-charcoal md:text-4xl">
+            Bài Viết <span className="text-brand-green">Mới Nhất</span>
           </h2>
           <p className="mx-auto max-w-2xl font-open-sans text-brand-gray">
-            Kham pha nhung bai viet huu ich ve suc khoe, dinh duong va loi song
-            lanh manh cung Nut Milk.
+            Khám phá những bài viết hữu ích về sức khoẻ, dinh dưỡng và lối sống
+            lành mạnh cùng Hạt Mộc.
           </p>
         </div>
 
         <div className="grid grid-cols-1 gap-8 md:grid-cols-3">
-          {posts.map((post) => (
+          {posts.map((post, i) => (
             <article
               key={post.id}
-              className="group overflow-hidden rounded-2xl bg-white shadow-sm transition-all duration-300 hover:shadow-lg"
+              className={`animate-on-scroll animate-delay-${(i + 1) * 100} group overflow-hidden rounded-2xl bg-white border border-gray-100 shadow-sm transition-all duration-300 hover:shadow-xl hover:-translate-y-1`}
             >
               {/* Featured Image */}
-              <div className="relative h-[200px] overflow-hidden bg-brand-offwhite">
+              <div className="relative h-[200px] overflow-hidden bg-brand-cream">
                 {post.featuredImage ? (
                   <img
                     src={post.featuredImage}
                     alt={post.title}
-                    className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
+                    className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-110"
                   />
                 ) : (
-                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-gold/20 to-brand-brown/10">
+                  <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-brand-mint to-brand-cream">
                     <span className="text-4xl">📝</span>
                   </div>
                 )}
                 {post.category && (
-                  <Badge className="absolute left-3 top-3 bg-brand-brown text-white hover:bg-brand-brown-dark">
+                  <Badge className="absolute left-3 top-3 bg-brand-green text-white hover:bg-brand-green-dark">
                     {post.category.name}
                   </Badge>
                 )}
@@ -73,7 +73,7 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
 
               {/* Content */}
               <div className="p-5">
-                <h3 className="mb-2 line-clamp-2 font-raleway text-lg font-semibold text-brand-charcoal group-hover:text-brand-brown transition-colors">
+                <h3 className="mb-2 line-clamp-2 font-raleway text-lg font-semibold text-brand-charcoal group-hover:text-brand-green transition-colors">
                   {post.title}
                 </h3>
                 {post.excerpt && (
@@ -82,30 +82,19 @@ export default function BlogHighlights({ posts }: BlogHighlightsProps) {
                   </p>
                 )}
                 <div className="flex items-center justify-between text-xs text-brand-gray">
-                  <span>{post.author?.name || "Nut Milk"}</span>
+                  <span>{post.author?.name || "Hạt Mộc"}</span>
                   <span>{formatDate(post.publishedAt)}</span>
                 </div>
                 <a
                   href="#"
-                  className="mt-4 inline-flex items-center font-raleway text-sm font-semibold text-brand-brown hover:text-brand-brown-dark transition-colors"
+                  className="mt-4 inline-flex items-center font-raleway text-sm font-semibold text-brand-green hover:text-brand-green-dark transition-colors"
                 >
-                  Doc Them
-                  <ChevronRight className="ml-1 h-4 w-4" />
+                  Đọc Thêm
+                  <ChevronRight className="ml-1 h-4 w-4 transition-transform group-hover:translate-x-1" />
                 </a>
               </div>
             </article>
           ))}
-        </div>
-
-        {/* View all CTA */}
-        <div className="mt-10 text-center">
-          <a
-            href="#"
-            className="inline-flex items-center font-raleway text-sm font-semibold text-brand-brown hover:text-brand-brown-dark transition-colors"
-          >
-            Xem Tat Ca Bai Viet
-            <ChevronRight className="ml-1 h-4 w-4" />
-          </a>
         </div>
       </div>
     </section>
