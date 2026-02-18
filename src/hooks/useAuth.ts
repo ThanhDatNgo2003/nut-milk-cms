@@ -20,7 +20,7 @@ export function useAuth() {
         return { success: false, error: "Invalid email or password" };
       }
 
-      router.push("/");
+      router.push("/dashboard");
       router.refresh();
       return { success: true, error: null };
     },

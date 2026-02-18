@@ -31,7 +31,7 @@ export default function FeaturedProducts({ products }: FeaturedProductsProps) {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
       {products.map((product) => (
-        <Link key={product.id} href={`/products/${product.id}`}>
+        <Link key={product.id} href={`/dashboard/products/${product.id}`}>
           <Card className="flex items-center gap-3 p-3 hover:bg-muted/50 transition-colors">
             <div className="relative h-14 w-14 shrink-0 overflow-hidden rounded-md bg-muted">
               <Image

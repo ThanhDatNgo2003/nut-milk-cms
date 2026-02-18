@@ -34,7 +34,7 @@ export default function RecentPosts({ posts }: RecentPostsProps) {
         <li key={post.id} className="flex items-start justify-between gap-4 py-3">
           <div className="min-w-0 flex-1 space-y-1">
             <Link
-              href={`/blog/${post.id}`}
+              href={`/dashboard/blog/${post.id}`}
               className="text-sm font-medium truncate block hover:underline"
             >
               {post.title}

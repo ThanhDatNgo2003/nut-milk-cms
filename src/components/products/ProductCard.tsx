@@ -65,7 +65,7 @@ export default function ProductCard({
           )}
         </div>
 
-        <Link href={`/products/${product.id}`} className="block">
+        <Link href={`/dashboard/products/${product.id}`} className="block">
           <h3 className="font-semibold truncate hover:underline">{product.name}</h3>
         </Link>
 
@@ -102,7 +102,7 @@ export default function ProductCard({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link href={`/products/${product.id}`}>
+            <Link href={`/dashboard/products/${product.id}`}>
               <Pencil className="mr-2 h-4 w-4" /> Edit
             </Link>
           </DropdownMenuItem>

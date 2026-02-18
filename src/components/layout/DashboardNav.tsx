@@ -20,11 +20,11 @@ interface DashboardNavProps {
 }
 
 const navItems = [
-  { href: "/", label: "Dashboard", icon: LayoutDashboard },
-  { href: "/blog", label: "Blog Posts", icon: FileText },
-  { href: "/products", label: "Products", icon: Package },
-  { href: "/analytics", label: "Analytics", icon: BarChart3 },
-  { href: "/settings", label: "Settings", icon: Settings },
+  { href: "/dashboard", label: "Dashboard", icon: LayoutDashboard },
+  { href: "/dashboard/blog", label: "Blog Posts", icon: FileText },
+  { href: "/dashboard/products", label: "Products", icon: Package },
+  { href: "/dashboard/analytics", label: "Analytics", icon: BarChart3 },
+  { href: "/dashboard/settings", label: "Settings", icon: Settings },
 ];
 
 export { navItems };
@@ -35,19 +35,19 @@ export function DashboardNav({ user }: DashboardNavProps) {
   return (
     <aside className="hidden w-64 border-r bg-muted/40 md:flex md:flex-col">
       <div className="flex h-14 items-center border-b px-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
+        <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <span className="text-lg">Nut Milk CMS</span>
         </Link>
       </div>
       <nav className="flex-1 space-y-1 p-3">
         {navItems.map((item) => {
           const isActive =
-            item.href === "/"
-              ? pathname === "/"
+            item.href === "/dashboard"
+              ? pathname === "/dashboard"
               : pathname.startsWith(item.href);
 
           // Only show settings to admins
-          if (item.href === "/settings" && user.role !== "ADMIN") {
+          if (item.href === "/dashboard/settings" && user.role !== "ADMIN") {
             return null;
           }
 

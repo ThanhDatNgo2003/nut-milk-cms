@@ -56,7 +56,7 @@ export default function BlogCard({ post, onPublish, onDelete }: BlogCardProps) {
             {calculateReadingTime(post.content)} min read
           </span>
         </div>
-        <Link href={`/blog/${post.id}`} className="block">
+        <Link href={`/dashboard/blog/${post.id}`} className="block">
           <h3 className="font-semibold truncate hover:underline">{post.title}</h3>
         </Link>
         {post.excerpt && (
@@ -94,17 +94,17 @@ export default function BlogCard({ post, onPublish, onDelete }: BlogCardProps) {
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end">
           <DropdownMenuItem asChild>
-            <Link href={`/blog/${post.id}`}>
+            <Link href={`/dashboard/blog/${post.id}`}>
               <Pencil className="mr-2 h-4 w-4" /> Edit
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/blog/${post.id}/preview`}>
+            <Link href={`/dashboard/blog/${post.id}/preview`}>
               <Eye className="mr-2 h-4 w-4" /> Preview
             </Link>
           </DropdownMenuItem>
           <DropdownMenuItem asChild>
-            <Link href={`/blog/new?from=${post.id}&lang=${getOppositeLanguage(post.language as SupportedLanguage).toLowerCase()}`}>
+            <Link href={`/dashboard/blog/new?from=${post.id}&lang=${getOppositeLanguage(post.language as SupportedLanguage).toLowerCase()}`}>
               <Languages className="mr-2 h-4 w-4" /> Translate
             </Link>
           </DropdownMenuItem>

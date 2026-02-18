@@ -28,12 +28,7 @@ export const authConfig: NextAuthConfig = {
     },
     async authorized({ auth, request: { nextUrl } }) {
       const isLoggedIn = !!auth?.user;
-      const isOnDashboard =
-        nextUrl.pathname === "/" ||
-        nextUrl.pathname.startsWith("/blog") ||
-        nextUrl.pathname.startsWith("/products") ||
-        nextUrl.pathname.startsWith("/analytics") ||
-        nextUrl.pathname.startsWith("/settings");
+      const isOnDashboard = nextUrl.pathname.startsWith("/dashboard");
       const isOnAuth =
         nextUrl.pathname.startsWith("/login") ||
         nextUrl.pathname.startsWith("/register");
@@ -46,7 +41,7 @@ export const authConfig: NextAuthConfig = {
 
       // Redirect logged-in users away from auth pages
       if (isOnAuth && isLoggedIn) {
-        return Response.redirect(new URL("/", nextUrl));
+        return Response.redirect(new URL("/dashboard", nextUrl));
       }
 
       // Protect dashboard pages

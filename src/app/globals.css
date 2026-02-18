@@ -45,6 +45,20 @@
   --radius-2xl: calc(var(--radius) + 8px);
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
+  /* Brand colors */
+  --color-brand-brown: var(--brand-brown);
+  --color-brand-brown-dark: var(--brand-brown-dark);
+  --color-brand-green: var(--brand-green);
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-offwhite: var(--brand-offwhite);
+  --color-brand-charcoal: var(--brand-charcoal);
+  --color-brand-gray: var(--brand-gray-medium);
+  --color-brand-green-fresh: var(--brand-green-fresh);
+  --color-brand-orange: var(--brand-orange);
+  /* Brand fonts */
+  --font-family-raleway: var(--font-raleway);
+  --font-family-open-sans: var(--font-open-sans);
+  --font-family-playfair: var(--font-playfair);
 }
 
 :root {
@@ -80,6 +94,17 @@
   --sidebar-accent-foreground: oklch(0.205 0 0);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.708 0 0);
+  /* Brand colors */
+  --brand-brown: #8B6F47;
+  --brand-brown-dark: #6B5435;
+  --brand-green: #2D5016;
+  --brand-gold: #D4A574;
+  --brand-offwhite: #F8F7F3;
+  --brand-charcoal: #2D2D2D;
+  --brand-gray-light: #E8E8E6;
+  --brand-gray-medium: #A0A0A0;
+  --brand-green-fresh: #10B981;
+  --brand-orange: #F59E0B;
 }
 
 .dark {
@@ -119,10 +144,8 @@
 @layer base {
   * {
     @apply border-border outline-ring/50;
-    @apply border-border outline-ring/50;
   }
   body {
-    @apply bg-background text-foreground;
     @apply bg-background text-foreground;
   }
 }
