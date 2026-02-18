@@ -36,10 +36,29 @@ describe("authConfig", () => {
       expect(result).toBe(true);
     });
 
-    it("redirects unauthenticated users from dashboard to login", async () => {
+    it("allows public root page for unauthenticated users", async () => {
       const result = await authorized({
         auth: null,
         request: { nextUrl: new URL("http://localhost/") },
+      } as Parameters<typeof authorized>[0]);
+      expect(result).toBe(true);
+    });
+
+    it("redirects unauthenticated users from dashboard to login", async () => {
+      const result = await authorized({
+        auth: null,
+        request: { nextUrl: new URL("http://localhost/dashboard") },
+      } as Parameters<typeof authorized>[0]);
+      expect(result).toBeInstanceOf(Response);
+      if (result instanceof Response) {
+        expect(result.headers.get("location")).toContain("/login");
+      }
+    });
+
+    it("redirects unauthenticated users from dashboard sub-routes to login", async () => {
+      const result = await authorized({
+        auth: null,
+        request: { nextUrl: new URL("http://localhost/dashboard/blog") },
       } as Parameters<typeof authorized>[0]);
       expect(result).toBeInstanceOf(Response);
       if (result instanceof Response) {
@@ -54,14 +73,14 @@ describe("authConfig", () => {
       } as Parameters<typeof authorized>[0]);
       expect(result).toBeInstanceOf(Response);
       if (result instanceof Response) {
-        expect(result.headers.get("location")).toBe("http://localhost/");
+        expect(result.headers.get("location")).toBe("http://localhost/dashboard");
       }
     });
 
     it("allows authenticated users on dashboard", async () => {
       const result = await authorized({
         auth: { user: { id: "1", name: "Test", email: "t@t.com", role: "ADMIN" } },
-        request: { nextUrl: new URL("http://localhost/") },
+        request: { nextUrl: new URL("http://localhost/dashboard") },
       } as Parameters<typeof authorized>[0]);
       expect(result).toBe(true);
     });
