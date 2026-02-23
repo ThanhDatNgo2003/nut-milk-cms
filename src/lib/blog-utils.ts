@@ -81,7 +81,7 @@ export function extractHeadings(
 export function addHeadingIds(htmlContent: string): string {
   return htmlContent.replace(
     /<h([2-3])([^>]*)>(.*?)<\/h([2-3])>/gi,
-    (_match, level, attrs, text, _closeLevel) => {
+    (_match: string, level: string, attrs: string, text: string) => {
       const plainText = text.replace(/<[^>]*>/g, "").trim();
       const id = plainText
         .toLowerCase()

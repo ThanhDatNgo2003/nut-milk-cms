@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Suspense } from "react";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import type { Prisma } from "@prisma/client";
 import Navigation from "@/components/public/Navigation";
@@ -113,7 +114,7 @@ export default async function ProductsPage({ searchParams }: ProductsPageProps) 
         <section className="bg-gradient-to-br from-brand-green via-brand-green-dark to-brand-leaf py-16 sm:py-20">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 text-center">
             <nav className="animate-on-scroll mb-4 font-open-sans text-sm text-white/60">
-              <a href="/" className="hover:text-white transition-colors">Trang chủ</a>
+              <Link href="/" className="hover:text-white transition-colors">Trang chủ</Link>
               <span className="mx-2">/</span>
               <span className="text-white">Sản Phẩm</span>
             </nav>
