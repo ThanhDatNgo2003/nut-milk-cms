@@ -5,19 +5,19 @@ const footerLinks = {
   about: {
     title: "Về Hạt Mộc",
     links: [
-      { label: "Câu Chuyện", href: "#story" },
-      { label: "Đội Ngũ", href: "#" },
-      { label: "Tuyển Dụng", href: "#" },
-      { label: "Liên Hệ", href: "#contact" },
+      { label: "Câu Chuyện", href: "/about" },
+      { label: "Liên Hệ", href: "/contact" },
+      { label: "Câu Hỏi Thường Gặp", href: "/faq" },
+      { label: "Chính Sách Bảo Mật", href: "/privacy" },
     ],
   },
   products: {
     title: "Sản Phẩm",
     links: [
-      { label: "Sữa Hạt Điều", href: "#products" },
-      { label: "Sữa Hạnh Nhân", href: "#products" },
-      { label: "Sữa Hạt Óc Chó", href: "#products" },
-      { label: "Combo Tiết Kiệm", href: "#products" },
+      { label: "Tất Cả Sản Phẩm", href: "/products" },
+      { label: "Sữa Hạt Điều", href: "/products?category=S%E1%BB%AFa+H%E1%BA%A1t+%C4%90i%E1%BB%81u" },
+      { label: "Sữa Hạnh Nhân", href: "/products?category=S%E1%BB%AFa+H%E1%BA%A1nh+Nh%C3%A2n" },
+      { label: "Sữa Yến Mạch", href: "/products?category=S%E1%BB%AFa+Y%E1%BA%BFn+M%E1%BA%A1ch" },
     ],
   },
   blog: {
@@ -98,9 +98,17 @@ export default function PublicFooter() {
             <p className="font-open-sans text-xs text-gray-500">
               &copy; {new Date().getFullYear()} Hạt Mộc. All rights reserved.
             </p>
-            <p className="font-open-sans text-xs text-gray-500">
-              Made with 💚 in Hồ Chí Minh
-            </p>
+            <div className="flex items-center gap-4">
+              <Link href="/privacy" className="font-open-sans text-xs text-gray-500 hover:text-brand-green-light transition-colors">
+                Bảo mật
+              </Link>
+              <Link href="/terms" className="font-open-sans text-xs text-gray-500 hover:text-brand-green-light transition-colors">
+                Điều khoản
+              </Link>
+              <Link href="/returns" className="font-open-sans text-xs text-gray-500 hover:text-brand-green-light transition-colors">
+                Đổi trả
+              </Link>
+            </div>
           </div>
         </div>
       </div>

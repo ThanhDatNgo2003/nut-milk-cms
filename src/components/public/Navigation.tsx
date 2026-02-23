@@ -16,10 +16,10 @@ import { Button } from "@/components/ui/button";
 
 const navLinks = [
   { href: "/", anchor: "#home", label: "Trang Chủ" },
-  { href: "/#products", anchor: "#products", label: "Sản Phẩm" },
-  { href: "/#story", anchor: "#story", label: "Về Chúng Tôi" },
+  { href: "/products", anchor: null, label: "Sản Phẩm" },
+  { href: "/about", anchor: null, label: "Về Chúng Tôi" },
   { href: "/blog", anchor: null, label: "Blog" },
-  { href: "/#contact", anchor: "#contact", label: "Liên Hệ" },
+  { href: "/contact", anchor: null, label: "Liên Hệ" },
 ];
 
 export default function Navigation() {
@@ -42,7 +42,7 @@ export default function Navigation() {
 
   const isActive = (link: (typeof navLinks)[number]) => {
     if (link.href === "/") return pathname === "/";
-    return pathname.startsWith(link.href.replace(/\/#.*$/, link.href === "/#products" ? "" : ""));
+    return pathname.startsWith(link.href);
   };
 
   return (

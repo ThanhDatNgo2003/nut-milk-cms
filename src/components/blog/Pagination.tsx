@@ -1,6 +1,6 @@
 "use client";
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter, useSearchParams, usePathname } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 interface PaginationProps {
@@ -12,6 +12,7 @@ interface PaginationProps {
 export default function Pagination({ currentPage, totalPages, total }: PaginationProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
 
   if (totalPages <= 1) return null;
 
@@ -22,7 +23,8 @@ export default function Pagination({ currentPage, totalPages, total }: Paginatio
     } else {
       params.set("page", page.toString());
     }
-    router.push(`/blog?${params.toString()}`);
+    const qs = params.toString();
+    router.push(qs ? `${pathname}?${qs}` : pathname);
   };
 
   // Calculate visible page range
