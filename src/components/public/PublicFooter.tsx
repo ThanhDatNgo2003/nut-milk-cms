@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { Mail, Phone, MapPin } from "lucide-react";
 
 const footerLinks = {
@@ -19,13 +20,13 @@ const footerLinks = {
       { label: "Combo Tiết Kiệm", href: "#products" },
     ],
   },
-  support: {
-    title: "Hỗ Trợ",
+  blog: {
+    title: "Blog",
     links: [
-      { label: "Hướng Dẫn Đặt Hàng", href: "#" },
-      { label: "Chính Sách Đổi Trả", href: "#" },
-      { label: "Câu Hỏi Thường Gặp", href: "#" },
-      { label: "Bảo Mật Thông Tin", href: "#" },
+      { label: "Tất Cả Bài Viết", href: "/blog" },
+      { label: "Sức Khoẻ", href: "/blog?category=suc-khoe" },
+      { label: "Dinh Dưỡng", href: "/blog?category=dinh-duong" },
+      { label: "Lối Sống", href: "/blog?category=loi-song" },
     ],
   },
 };
@@ -69,12 +70,21 @@ export default function PublicFooter() {
               <ul className="space-y-2.5">
                 {section.links.map((link) => (
                   <li key={link.label}>
-                    <a
-                      href={link.href}
-                      className="font-open-sans text-sm text-gray-400 transition-colors hover:text-brand-green-light"
-                    >
-                      {link.label}
-                    </a>
+                    {link.href.startsWith("/") ? (
+                      <Link
+                        href={link.href}
+                        className="font-open-sans text-sm text-gray-400 transition-colors hover:text-brand-green-light"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <a
+                        href={link.href}
+                        className="font-open-sans text-sm text-gray-400 transition-colors hover:text-brand-green-light"
+                      >
+                        {link.label}
+                      </a>
+                    )}
                   </li>
                 ))}
               </ul>

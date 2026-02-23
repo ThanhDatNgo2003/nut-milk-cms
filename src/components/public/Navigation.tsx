@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Menu } from "lucide-react";
 import { cn } from "@/lib/utils";
 import {
@@ -14,22 +15,35 @@ import {
 import { Button } from "@/components/ui/button";
 
 const navLinks = [
-  { href: "#home", label: "Trang Chủ" },
-  { href: "#products", label: "Sản Phẩm" },
-  { href: "#story", label: "Về Chúng Tôi" },
-  { href: "#blog", label: "Blog" },
-  { href: "#contact", label: "Liên Hệ" },
+  { href: "/", anchor: "#home", label: "Trang Chủ" },
+  { href: "/#products", anchor: "#products", label: "Sản Phẩm" },
+  { href: "/#story", anchor: "#story", label: "Về Chúng Tôi" },
+  { href: "/blog", anchor: null, label: "Blog" },
+  { href: "/#contact", anchor: "#contact", label: "Liên Hệ" },
 ];
 
 export default function Navigation() {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const pathname = usePathname();
+  const isHome = pathname === "/";
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  const getHref = (link: (typeof navLinks)[number]) => {
+    // On home page, use anchor links for sections; on other pages use full path
+    if (isHome && link.anchor) return link.anchor;
+    return link.href;
+  };
+
+  const isActive = (link: (typeof navLinks)[number]) => {
+    if (link.href === "/") return pathname === "/";
+    return pathname.startsWith(link.href.replace(/\/#.*$/, link.href === "/#products" ? "" : ""));
+  };
 
   return (
     <header
@@ -50,15 +64,36 @@ export default function Navigation() {
 
         {/* Desktop Nav */}
         <nav className="hidden md:flex items-center gap-8">
-          {navLinks.map((link) => (
-            <a
-              key={link.href}
-              href={link.href}
-              className="text-sm font-medium font-open-sans text-brand-charcoal hover:text-brand-green transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-green after:transition-all after:duration-300 hover:after:w-full"
-            >
-              {link.label}
-            </a>
-          ))}
+          {navLinks.map((link) => {
+            const href = getHref(link);
+            const active = isActive(link);
+            // Use Link for /blog, <a> for anchor links
+            if (!link.anchor) {
+              return (
+                <Link
+                  key={link.href}
+                  href={href}
+                  className={cn(
+                    "text-sm font-medium font-open-sans transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-green after:transition-all after:duration-300 hover:after:w-full",
+                    active
+                      ? "text-brand-green after:w-full"
+                      : "text-brand-charcoal hover:text-brand-green"
+                  )}
+                >
+                  {link.label}
+                </Link>
+              );
+            }
+            return (
+              <a
+                key={link.href}
+                href={href}
+                className="text-sm font-medium font-open-sans text-brand-charcoal hover:text-brand-green transition-colors relative after:absolute after:bottom-[-4px] after:left-0 after:h-[2px] after:w-0 after:bg-brand-green after:transition-all after:duration-300 hover:after:w-full"
+              >
+                {link.label}
+              </a>
+            );
+          })}
         </nav>
 
         {/* Right side */}
@@ -88,16 +123,31 @@ export default function Navigation() {
                 </span>
               </div>
               <nav className="flex flex-col gap-1 p-4">
-                {navLinks.map((link) => (
-                  <SheetClose key={link.href} asChild>
-                    <a
-                      href={link.href}
-                      className="rounded-md px-3 py-2.5 text-sm font-medium font-open-sans text-brand-charcoal hover:bg-brand-cream hover:text-brand-green transition-colors"
-                    >
-                      {link.label}
-                    </a>
-                  </SheetClose>
-                ))}
+                {navLinks.map((link) => {
+                  const href = getHref(link);
+                  if (!link.anchor) {
+                    return (
+                      <SheetClose key={link.href} asChild>
+                        <Link
+                          href={href}
+                          className="rounded-md px-3 py-2.5 text-sm font-medium font-open-sans text-brand-charcoal hover:bg-brand-cream hover:text-brand-green transition-colors"
+                        >
+                          {link.label}
+                        </Link>
+                      </SheetClose>
+                    );
+                  }
+                  return (
+                    <SheetClose key={link.href} asChild>
+                      <a
+                        href={href}
+                        className="rounded-md px-3 py-2.5 text-sm font-medium font-open-sans text-brand-charcoal hover:bg-brand-cream hover:text-brand-green transition-colors"
+                      >
+                        {link.label}
+                      </a>
+                    </SheetClose>
+                  );
+                })}
                 <div className="mt-4 border-t pt-4">
                   <SheetClose asChild>
                     <Link
