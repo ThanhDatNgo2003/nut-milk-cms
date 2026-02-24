@@ -139,6 +139,15 @@ export async function generateMetadata({ params }: BlogPostPageProps): Promise<M
       authors: post.author?.name ? [post.author.name] : undefined,
       images: post.featuredImage ? [{ url: post.featuredImage }] : undefined,
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: post.featuredImage ? [post.featuredImage] : undefined,
+    },
+    alternates: {
+      canonical: `/blog/${slug}`,
+    },
   };
 }
 
@@ -158,6 +167,8 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
   const headings = extractHeadings(processedContent);
   const isLocalImage = post.featuredImage?.startsWith("/uploads");
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hatmoc.vn";
+
   // Schema.org structured data
   const jsonLd = {
     "@context": "https://schema.org",
@@ -167,6 +178,9 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     image: post.featuredImage || undefined,
     datePublished: post.publishedAt,
     dateModified: post.updatedAt,
+    url: `${baseUrl}/blog/${post.slug}`,
+    wordCount: post.content.replace(/<[^>]*>/g, "").split(/\s+/).length,
+    keywords: post.metaKeywords.length > 0 ? post.metaKeywords.join(", ") : undefined,
     author: {
       "@type": "Person",
       name: post.author?.name || "Hạt Mộc",
@@ -174,10 +188,55 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
     publisher: {
       "@type": "Organization",
       name: "Hạt Mộc",
+      logo: {
+        "@type": "ImageObject",
+        url: `${baseUrl}/images/logo.png`,
+      },
     },
     mainEntityOfPage: {
       "@type": "WebPage",
+      "@id": `${baseUrl}/blog/${post.slug}`,
     },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Trang chủ",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Blog",
+        item: `${baseUrl}/blog`,
+      },
+      ...(post.category
+        ? [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: post.category.name,
+              item: `${baseUrl}/blog?category=${post.category.slug}`,
+            },
+            {
+              "@type": "ListItem",
+              position: 4,
+              name: post.title,
+            },
+          ]
+        : [
+            {
+              "@type": "ListItem",
+              position: 3,
+              name: post.title,
+            },
+          ]),
+    ],
   };
 
   return (
@@ -185,6 +244,10 @@ export default async function BlogPostPage({ params }: BlogPostPageProps) {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ReadingProgressBar />
       <ScrollAnimationProvider>

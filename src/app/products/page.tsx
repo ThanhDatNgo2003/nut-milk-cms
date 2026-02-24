@@ -11,7 +11,7 @@ import ProductFilterBar from "@/components/public/ProductFilterBar";
 import Pagination from "@/components/blog/Pagination";
 
 export const metadata: Metadata = {
-  title: "Sản Phẩm | Hạt Mộc - Sữa Hạt Tươi 100% Tự Nhiên",
+  title: "Sản Phẩm - Sữa Hạt Tươi 100% Tự Nhiên",
   description:
     "Khám phá bộ sưu tập sữa hạt tươi Hạt Mộc - sữa hạnh nhân, sữa hạt điều, sữa yến mạch và nhiều hơn nữa. Tươi mỗi ngày, giao hàng tận nơi.",
   openGraph: {
@@ -20,6 +20,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     siteName: "Hạt Mộc",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Sản Phẩm | Hạt Mộc",
+    description: "Sữa hạt tươi 100% tự nhiên, giàu dinh dưỡng cho sức khoẻ mỗi ngày.",
+  },
+  alternates: {
+    canonical: "/products",
   },
 };
 

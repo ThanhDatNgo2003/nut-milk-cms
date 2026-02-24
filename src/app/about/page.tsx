@@ -5,7 +5,7 @@ import PublicFooter from "@/components/public/PublicFooter";
 import ScrollAnimationProvider from "@/components/public/ScrollAnimationProvider";
 
 export const metadata: Metadata = {
-  title: "Về Chúng Tôi | Hạt Mộc - Câu Chuyện Thương Hiệu",
+  title: "Về Chúng Tôi - Câu Chuyện Thương Hiệu",
   description:
     "Tìm hiểu câu chuyện Hạt Mộc - từ đam mê sức khoẻ đến sứ mệnh mang sữa hạt tươi nguyên chất đến mỗi gia đình Việt.",
   openGraph: {
@@ -14,6 +14,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     siteName: "Hạt Mộc",
+  },
+  twitter: {
+    card: "summary",
+    title: "Về Chúng Tôi | Hạt Mộc",
+    description: "Câu chuyện và sứ mệnh của Hạt Mộc.",
+  },
+  alternates: {
+    canonical: "/about",
   },
 };
 

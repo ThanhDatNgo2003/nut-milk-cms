@@ -32,6 +32,15 @@ export const metadata: Metadata = {
     locale: "vi_VN",
     siteName: "Hạt Mộc",
   },
+  twitter: {
+    card: "summary_large_image",
+    title: "Hạt Mộc | Sữa Hạt Tươi 100% Tự Nhiên",
+    description:
+      "Sữa hạt tươi nguyên chất, không chất bảo quản. Sản phẩm hữu cơ, giàu dinh dưỡng.",
+  },
+  alternates: {
+    canonical: "/",
+  },
 };
 
 async function getFeaturedProducts() {
@@ -106,8 +115,36 @@ export default async function HomePage() {
     getLatestPosts(),
   ]);
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hatmoc.vn";
+  const organizationJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Hạt Mộc",
+    url: baseUrl,
+    logo: `${baseUrl}/images/logo.png`,
+    description:
+      "Sữa hạt tươi nguyên chất, không chất bảo quản. Sản phẩm hữu cơ, giàu dinh dưỡng.",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Hồ Chí Minh",
+      addressCountry: "VN",
+    },
+    contactPoint: {
+      "@type": "ContactPoint",
+      telephone: "+84-909-000-000",
+      contactType: "customer service",
+      availableLanguage: "Vietnamese",
+    },
+  };
+
   return (
     <ScrollAnimationProvider>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify(organizationJsonLd),
+        }}
+      />
       <main className="min-h-screen bg-white">
         <Navigation />
         <HeroSection />

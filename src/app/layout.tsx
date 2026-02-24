@@ -4,6 +4,7 @@ import { Raleway, Open_Sans, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Toaster } from "@/components/ui/sonner";
+import GoogleAnalytics from "@/components/GoogleAnalytics";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,8 +35,51 @@ const playfairDisplay = Playfair_Display({
 });
 
 export const metadata: Metadata = {
-  title: "Nut Milk CMS",
-  description: "Content Management System for Nut Milk Business",
+  metadataBase: new URL(
+    process.env.NEXT_PUBLIC_SITE_URL || "https://hatmoc.vn"
+  ),
+  title: {
+    default: "Hạt Mộc | Sữa Hạt Tươi 100% Tự Nhiên",
+    template: "%s | Hạt Mộc",
+  },
+  description:
+    "Sữa hạt tươi nguyên chất, không chất bảo quản. Sản phẩm hữu cơ, giàu dinh dưỡng, tốt cho sức khoẻ. Giao hàng tận nơi tại Hồ Chí Minh.",
+  keywords: [
+    "sữa hạt",
+    "sữa hạt tươi",
+    "hạt mộc",
+    "sữa hữu cơ",
+    "sữa hạt điều",
+    "sữa hạnh nhân",
+    "healthy drink",
+    "Hồ Chí Minh",
+  ],
+  authors: [{ name: "Hạt Mộc" }],
+  creator: "Hạt Mộc",
+  publisher: "Hạt Mộc",
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-video-preview": -1,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    siteName: "Hạt Mộc",
+  },
+  twitter: {
+    card: "summary_large_image",
+    creator: "@hatmoc",
+  },
+  verification: {
+    google: process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION || undefined,
+  },
 };
 
 export default function RootLayout({
@@ -45,6 +89,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="vi">
+      <GoogleAnalytics />
       <body
         className={`${geistSans.variable} ${geistMono.variable} ${raleway.variable} ${openSans.variable} ${playfairDisplay.variable} antialiased`}
       >

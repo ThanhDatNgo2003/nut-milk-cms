@@ -2,8 +2,16 @@ import type { Metadata } from "next";
 import LegalPageLayout from "@/components/public/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Điều Khoản Sử Dụng | Hạt Mộc",
+  title: "Điều Khoản Sử Dụng",
   description: "Điều khoản sử dụng trang web và dịch vụ của Hạt Mộc.",
+  twitter: {
+    card: "summary",
+    title: "Điều Khoản Sử Dụng | Hạt Mộc",
+    description: "Điều khoản sử dụng trang web và dịch vụ của Hạt Mộc.",
+  },
+  alternates: {
+    canonical: "/terms",
+  },
 };
 
 export default function TermsPage() {

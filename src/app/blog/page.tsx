@@ -10,7 +10,7 @@ import SearchFilterBar from "@/components/blog/SearchFilterBar";
 import Pagination from "@/components/blog/Pagination";
 
 export const metadata: Metadata = {
-  title: "Blog | Hạt Mộc - Kiến Thức Sức Khoẻ & Dinh Dưỡng",
+  title: "Blog - Kiến Thức Sức Khoẻ & Dinh Dưỡng",
   description:
     "Khám phá các bài viết về sức khoẻ, dinh dưỡng, lối sống lành mạnh và công dụng tuyệt vời của sữa hạt tự nhiên.",
   openGraph: {
@@ -20,6 +20,15 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     siteName: "Hạt Mộc",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Blog | Hạt Mộc",
+    description:
+      "Kiến thức sức khoẻ, dinh dưỡng và lối sống lành mạnh từ Hạt Mộc.",
+  },
+  alternates: {
+    canonical: "/blog",
   },
 };
 

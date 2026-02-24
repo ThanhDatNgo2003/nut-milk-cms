@@ -86,6 +86,15 @@ export async function generateMetadata({ params }: ProductDetailPageProps): Prom
       siteName: "Hạt Mộc",
       images: product.image ? [{ url: product.image }] : undefined,
     },
+    twitter: {
+      card: "summary_large_image",
+      title,
+      description,
+      images: product.image ? [product.image] : undefined,
+    },
+    alternates: {
+      canonical: `/products/${slug}`,
+    },
   };
 }
 
@@ -97,12 +106,20 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
 
   const relatedProducts = await getRelatedProducts(product.id, product.category);
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://hatmoc.vn";
+
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Product",
     name: product.name,
     description: product.description,
     image: product.image,
+    url: `${baseUrl}/products/${product.slug}`,
+    brand: {
+      "@type": "Brand",
+      name: "Hạt Mộc",
+    },
+    sku: product.slug,
     offers: {
       "@type": "AggregateOffer",
       priceCurrency: "VND",
@@ -113,7 +130,32 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
         ? Math.max(...product.variants.map((v) => v.price))
         : product.price,
       availability: "https://schema.org/InStock",
+      offerCount: product.variants.length || 1,
     },
+  };
+
+  const breadcrumbJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      {
+        "@type": "ListItem",
+        position: 1,
+        name: "Trang chủ",
+        item: baseUrl,
+      },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "Sản Phẩm",
+        item: `${baseUrl}/products`,
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: product.name,
+      },
+    ],
   };
 
   return (
@@ -121,6 +163,10 @@ export default async function ProductDetailPage({ params }: ProductDetailPagePro
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
       />
       <ScrollAnimationProvider>
         <main className="min-h-screen bg-white">

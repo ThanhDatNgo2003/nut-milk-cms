@@ -2,8 +2,16 @@ import type { Metadata } from "next";
 import LegalPageLayout from "@/components/public/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Chính Sách Bảo Mật | Hạt Mộc",
+  title: "Chính Sách Bảo Mật",
   description: "Chính sách bảo mật và quyền riêng tư của Hạt Mộc.",
+  twitter: {
+    card: "summary",
+    title: "Chính Sách Bảo Mật | Hạt Mộc",
+    description: "Chính sách bảo mật và quyền riêng tư của Hạt Mộc.",
+  },
+  alternates: {
+    canonical: "/privacy",
+  },
 };
 
 export default function PrivacyPage() {

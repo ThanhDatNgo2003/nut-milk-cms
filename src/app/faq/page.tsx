@@ -5,7 +5,7 @@ import ScrollAnimationProvider from "@/components/public/ScrollAnimationProvider
 import FAQAccordion from "@/components/public/FAQAccordion";
 
 export const metadata: Metadata = {
-  title: "Câu Hỏi Thường Gặp | Hạt Mộc",
+  title: "Câu Hỏi Thường Gặp",
   description:
     "Tìm câu trả lời cho các câu hỏi thường gặp về sữa hạt Hạt Mộc - sản phẩm, đặt hàng, giao hàng và bảo quản.",
   openGraph: {
@@ -14,6 +14,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     siteName: "Hạt Mộc",
+  },
+  twitter: {
+    card: "summary",
+    title: "FAQ | Hạt Mộc",
+    description: "Câu hỏi thường gặp về sữa hạt Hạt Mộc.",
+  },
+  alternates: {
+    canonical: "/faq",
   },
 };
 
@@ -96,8 +104,27 @@ const faqCategories = [
 ];
 
 export default function FAQPage() {
+  // Flatten all FAQ items for schema
+  const allFaqItems = faqCategories.flatMap((cat) => cat.items);
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: allFaqItems.map((item) => ({
+      "@type": "Question",
+      name: item.question,
+      acceptedAnswer: {
+        "@type": "Answer",
+        text: item.answer,
+      },
+    })),
+  };
+
   return (
     <ScrollAnimationProvider>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
+      />
       <main className="min-h-screen bg-white">
         <Navigation />
 

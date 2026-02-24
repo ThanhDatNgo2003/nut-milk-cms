@@ -6,7 +6,7 @@ import ScrollAnimationProvider from "@/components/public/ScrollAnimationProvider
 import ContactForm from "@/components/public/ContactForm";
 
 export const metadata: Metadata = {
-  title: "Liên Hệ | Hạt Mộc - Sữa Hạt Tươi Tự Nhiên",
+  title: "Liên Hệ - Sữa Hạt Tươi Tự Nhiên",
   description:
     "Liên hệ Hạt Mộc để đặt hàng, hỏi về sản phẩm hoặc hợp tác. Chúng tôi luôn sẵn sàng lắng nghe ý kiến của bạn.",
   openGraph: {
@@ -15,6 +15,14 @@ export const metadata: Metadata = {
     type: "website",
     locale: "vi_VN",
     siteName: "Hạt Mộc",
+  },
+  twitter: {
+    card: "summary",
+    title: "Liên Hệ | Hạt Mộc",
+    description: "Liên hệ với chúng tôi - Hạt Mộc sữa hạt tươi tự nhiên.",
+  },
+  alternates: {
+    canonical: "/contact",
   },
 };
 

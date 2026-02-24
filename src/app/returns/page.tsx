@@ -2,8 +2,16 @@ import type { Metadata } from "next";
 import LegalPageLayout from "@/components/public/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "Chính Sách Đổi Trả | Hạt Mộc",
+  title: "Chính Sách Đổi Trả",
   description: "Chính sách đổi trả hàng của Hạt Mộc - đảm bảo quyền lợi khách hàng.",
+  twitter: {
+    card: "summary",
+    title: "Chính Sách Đổi Trả | Hạt Mộc",
+    description: "Chính sách đổi trả hàng của Hạt Mộc - đảm bảo quyền lợi khách hàng.",
+  },
+  alternates: {
+    canonical: "/returns",
+  },
 };
 
 export default function ReturnsPage() {
